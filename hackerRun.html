@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <script src="./lib/touch-emulator.js"></script>
+    <script src="./lib/matter.js"></script>
+    <script src="./lib/d3.v4.js"></script>
+    <script src="./lib/jquery-3.1.1.js"></script>
+    <script src="./lib/hammer-2.0.8.js"></script>
+
+    <script src="./js/SimplePromise.js"></script>
+    <script src="./js/matterD3Renderer.js"></script>
+
+    <script src="./js/init.js"></script>
+    <script src="./js/create.js"></script>
+    <script src="./js/events.js"></script>
+
+    <meta charset="UTF-8">
+    <title>Hacker Run</title>
+</head>
+<body>
+
+<svg id="field"></svg>
+
+<script>
+    initWorld();
+
+    onTouch(function(x, y) {
+        circle(x, y, 10);
+    });
+
+    onTouchMove(function (x, y) {
+        rectangle(x, y, 5, 5, true);
+    })
+</script>
+
+</body>
+</html>
