@@ -15,7 +15,7 @@ function rectangle(x, y, width, height, isStatic, color) {
         isStatic = false;
     }
     var rectangle = Matter.Bodies.rectangle(x, y, width, height, {
-        isStatic: isStatic, className: "color-" + color
+        isStatic: isStatic, color: color
     });
     Matter.World.add(WORLD.engine.world, [rectangle]);
 

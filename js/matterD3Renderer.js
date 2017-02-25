@@ -35,7 +35,7 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
 
     function createClassNameFromBody(d, defaultClassName) {
         if(d.className != null) {
-            return d.className;
+            return defaultClassName + " " + d.className;
         }
         else {
             return defaultClassName;
@@ -54,11 +54,16 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
         var staticBodies = Matter.Composite.allBodies(engine.world).filter(isStatic);
 
         var data = gStatic.selectAll("path.static")
-            .data(staticBodies);
+            .data(staticBodies, function (d) {
+                return d.id;
+            });
 
         data.enter()
             .append("path")
             .attr("class", createClassNameFromBodyForStatic)
+            .attr("style", function (d) {
+                return "fill: " + (d.color != null ? d.color : "grey")
+            })
             .attr("d", createPathFromBody);
 
         data.exit().remove();
