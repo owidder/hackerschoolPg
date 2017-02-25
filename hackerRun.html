@@ -33,7 +33,13 @@
 
     onTouchMove(function (x, y) {
         rectangle(x, y, 5, 5, true);
-    })
+    });
+
+    onCollisionStart(function(pair) {
+        console.dir(pair);
+    });
+
+    //rectangle(Math.random() * (WORLD.width/3) + (WORLD.width/3), WORLD.height-20, 30, 10, true, "red");
 </script>
 
 </body>

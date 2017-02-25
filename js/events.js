@@ -46,3 +46,15 @@ function onTouchMove(func) {
         func(event.changedTouches[0].clientX, event.changedTouches[0].clientY, event);
     })
 }
+
+function onCollisionStart(func) {
+    Matter.Events.on(WORLD.engine, 'collisionStart', function(event) {
+        var pairs = event.pairs;
+
+        for (var i = 0; i < pairs.length; i++) {
+            var pair = pairs[i];
+            func(pair);
+        }
+    });
+
+}
