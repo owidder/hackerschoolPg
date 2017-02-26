@@ -13,6 +13,10 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
         return !body.isStatic;
     }
 
+    function isCircle(body) {
+        return body.label.toLowerCase().startsWith("circle");
+    }
+
     function hasTitle(body) {
         return body.title != null;
     }
@@ -73,14 +77,16 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
     }
 
     function renderD3Dynamic() {
-        var dynamicBodies = Matter.Composite.allBodies(engine.world).filter(isDynamic);
+        var dynamicOthers = Matter.Composite.allBodies(engine.world).filter(function(body) {
+            return isDynamic(body) && !isCircle(body);
+        });
 
-        var data = gDynamic.selectAll("path.dynamic")
-            .data(dynamicBodies, function(d) {
+        var dataOthers = gDynamic.selectAll("path.dynamic")
+            .data(dynamicOthers, function(d) {
                 return d.id;
             });
 
-        data.enter()
+        dataOthers.enter()
             .append("path")
             .attr("class", createClassNameFromBodyForDynamic)
             .attr("style", function (d) {
@@ -91,7 +97,37 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
         gDynamic.selectAll("path.dynamic")
             .attr("d", createPathFromBody);
 
-        data.exit().remove();
+        dataOthers.exit().remove();
+
+        var dynamicCircles = Matter.Composite.allBodies(engine.world).filter(function(body) {
+            return isDynamic(body) && isCircle(body);
+        });
+
+        var dataCircles = gDynamic.selectAll("circle.dynamic")
+            .data(dynamicCircles, function (d) {
+                return d.id;
+            });
+
+        dataCircles.enter()
+            .append("circle")
+            .attr("class", createClassNameFromBodyForDynamic)
+            .attr("r", function(d) {
+                return d.circleRadius;
+            })
+            .attr("style", function (d) {
+                return "fill: " + (d.color != null ? d.color : "black")
+            });
+
+        gDynamic.selectAll("circle.dynamic")
+            .attr("cx", function(d) {
+                return d.position.x;
+            })
+            .attr("cy", function(d) {
+                return d.position.y;
+            });
+
+        dataCircles.exit().remove();
+
     }
 
     function renderD3DynamicTitles() {

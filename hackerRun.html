@@ -54,8 +54,7 @@
 
     var randomPositionX = Math.random() * (WORLD.width/3) + (WORLD.width/3);
     var rectid = WORLD.rectangle(randomPositionX, WORLD.height-20, 30, 10, true, "green");
-    WORLD.rectangle(100, 100, 100, 100, true, "blue");
-    WORLD.rectangle(100, WORLD.height - 100, WORLD.width - 100, 5, true, "grey");
+    WORLD.rectangle(WORLD.width/2, WORLD.height - 100, WORLD.width - 300, 5, true, "grey");
     console.log(rectid);
 
     WORLD.onCollisionStart(rectid, function(pair) {
