@@ -82,7 +82,11 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
 
         data.enter()
             .append("path")
-            .attr("class", createClassNameFromBodyForDynamic);
+            .attr("class", createClassNameFromBodyForDynamic)
+            .attr("style", function (d) {
+                return "fill: " + (d.color != null ? d.color : "black")
+            });
+
 
         gDynamic.selectAll("path.dynamic")
             .attr("d", createPathFromBody);

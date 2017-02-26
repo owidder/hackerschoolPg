@@ -1,34 +1,34 @@
 'use strict';
 
-function onClick(func) {
+WORLD.onClick = function(func) {
     $(document).click(function (event) {
         func(event.clientX, event.clientY, event);
     });
-}
+};
 
-function initTouch() {
+WORLD.initTouch = function() {
     if(!WORLD.touchInitialized) {
         TouchEmulator();
         WORLD.touchInitialized == true;
     }
-}
+};
 
-function onTouchStart(func) {
-    initTouch();
+WORLD.onTouchStart = function(func) {
+    WORLD.initTouch();
     document.body.addEventListener('touchstart', function(event) {
         func(event.touches[0].clientX, event.touches[0].clientY, event);
     });
-}
+};
 
-function onTouchEnd(func) {
-    initTouch();
+WORLD.onTouchEnd = function(func) {
+    WORLD.initTouch();
     document.body.addEventListener('touchend', function (event) {
         func(event.changedTouches[0].clientX, event.changedTouches[0].clientY, event);
     })
-}
+};
 
-function onTouch(func) {
-    initTouch();
+WORLD.onTouch = function(func) {
+    WORLD.initTouch();
     document.body.addEventListener('touchend', function (event) {
         if(WORLD.touchMove) {
             WORLD.touchMove = false;
@@ -37,17 +37,17 @@ function onTouch(func) {
             func(event.changedTouches[0].clientX, event.changedTouches[0].clientY, event);
         }
     })
-}
+};
 
-function onTouchMove(func) {
-    initTouch();
+WORLD.onTouchMove = function(func) {
+    WORLD.initTouch();
     document.body.addEventListener('touchmove', function (event) {
         WORLD.touchMove = true;
         func(event.changedTouches[0].clientX, event.changedTouches[0].clientY, event);
     })
-}
+};
 
-function onCollisionStart(id, func) {
+WORLD.onCollisionStart = function(id, func) {
     Matter.Events.on(WORLD.engine, 'collisionStart', function(event) {
         var pairs = event.pairs;
 
@@ -58,5 +58,4 @@ function onCollisionStart(id, func) {
             }
         }
     });
-
-}
+};

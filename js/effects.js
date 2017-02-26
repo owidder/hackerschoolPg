@@ -1,6 +1,6 @@
 'use strict';
 
-function backgroundColorFlash(color) {
+WORLD.backgroundColorFlash = function(color) {
     d3.selectAll("svg")
         .transition()
         .duration(300)
@@ -11,9 +11,9 @@ function backgroundColorFlash(color) {
                 .duration(1000)
                 .style("background-color", "white");
         });
-}
+};
 
-function showSplash(message, className) {
+WORLD.showSplash = function(message, className) {
     if(className == null) {
         className = "";
     }

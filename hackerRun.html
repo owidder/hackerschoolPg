@@ -13,10 +13,11 @@
     <script src="./js/SimplePromise.js"></script>
     <script src="./js/matterD3Renderer.js"></script>
 
+    <script src="./js/boot.js"></script>
     <script src="./js/effects.js"></script>
-    <script src="./js/init.js"></script>
     <script src="./js/create.js"></script>
     <script src="./js/events.js"></script>
+    <script src="./js/init.js"></script>
 
     <meta charset="UTF-8">
     <title>Hacker Run</title>
@@ -37,26 +38,30 @@
 <svg id="field"></svg>
 
 <script>
-    initWorld();
+    WORLD.init();
 
-    onTouch(function(x, y) {
-        circle(x, y, 10);
+    WORLD.onTouch(function(x, y) {
+        if(y < 100) {
+            WORLD.circle(x, y, 10, false, "blue");
+        }
     });
 
-    onTouchMove(function (x, y) {
-        rectangle(x, y, 5, 5, true);
+    WORLD.onTouchMove(function (x, y) {
+        if(y >= 100) {
+            WORLD.rectangle(x, y, 5, 5, true);
+        }
     });
 
     var randomPositionX = Math.random() * (WORLD.width/3) + (WORLD.width/3);
-    var rectid = rectangle(randomPositionX, WORLD.height-20, 30, 10, true, "green");
-    rectangle(randomPositionX - 20, WORLD.height - 100, 90, 5, true, "grey");
-    rectid
+    var rectid = WORLD.rectangle(randomPositionX, WORLD.height-20, 30, 10, true, "green");
+    WORLD.rectangle(100, 100, 100, 100, true, "blue");
+    WORLD.rectangle(100, WORLD.height - 100, WORLD.width - 100, 5, true, "grey");
     console.log(rectid);
 
-    onCollisionStart(rectid, function(pair) {
+    WORLD.onCollisionStart(rectid, function(pair) {
         console.dir(pair);
-        backgroundColorFlash("red");
-        showSplash("YEEEEAAAAAA", "hit");
+        WORLD.backgroundColorFlash("red");
+        WORLD.showSplash("YEEEEAAAAAA", "hit");
     });
 
 </script>

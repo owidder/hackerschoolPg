@@ -1,7 +1,6 @@
 'use strict';
 
-var WORLD;
-function initWorld() {
+WORLD.init = function() {
 
     var width = window.innerWidth;
     var height = window.innerHeight;
@@ -20,13 +19,11 @@ function initWorld() {
         d3Renderer.renderD3();
     });
 
-    WORLD = {
-        engine: engine,
-        gDynamic: gDynamic,
-        svg: svg,
-        width: width,
-        height: height
-    };
+    WORLD.engine = engine;
+    WORLD.gDynamic = gDynamic;
+    WORLD.svg = svg;
+    WORLD.width = width;
+    WORLD.height = height;
 
-    showSplash("world initialized");
-}
+    WORLD.showSplash("world initialized");
+};
