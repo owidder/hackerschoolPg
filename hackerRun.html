@@ -16,6 +16,7 @@
     <script src="./js/boot.js"></script>
     <script src="./js/effects.js"></script>
     <script src="./js/body.js"></script>
+    <script src="./js/nobody.js"></script>
     <script src="./js/events.js"></script>
     <script src="./js/init.js"></script>
 
@@ -51,6 +52,8 @@
             WORLD.rectangleBody(x, y, 5, 5, true);
         }
     });
+
+    WORLD.rectangle(0, 0, WORLD.width, 100, "lightgrey");
 
     var randomPositionX = Math.random() * (WORLD.width/3) + (WORLD.width/3);
     var rectid = WORLD.rectangleBody(randomPositionX, WORLD.height-20, 30, 10, true, "green");
