@@ -47,13 +47,15 @@ function onTouchMove(func) {
     })
 }
 
-function onCollisionStart(func) {
+function onCollisionStart(id, func) {
     Matter.Events.on(WORLD.engine, 'collisionStart', function(event) {
         var pairs = event.pairs;
 
         for (var i = 0; i < pairs.length; i++) {
             var pair = pairs[i];
-            func(pair);
+            if(pair.bodyA.id == id || pair.bodyB.id == id) {
+                func(pair);
+            }
         }
     });
 

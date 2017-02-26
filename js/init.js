@@ -3,30 +3,6 @@
 var WORLD;
 function initWorld() {
 
-    function showSplash() {
-        svg.append("text")
-            .attr("class", "message")
-            .attr("x", width/2)
-            .attr("y", height/2)
-            .style("opacity", 0)
-            .text("world initialized");
-
-        svg.selectAll("text.message")
-            .transition()
-            .duration(1000)
-            .style("opacity", 1)
-            .on("end", function() {
-                svg.selectAll("text.message")
-                    .transition()
-                    .duration(1000)
-                    .style("opacity", 0)
-                    .on("end", function () {
-                        svg.selectAll("text.message")
-                            .remove();
-                    })
-            });
-    }
-
     var width = window.innerWidth;
     var height = window.innerHeight;
 
@@ -52,5 +28,5 @@ function initWorld() {
         height: height
     };
 
-    showSplash();
+    showSplash("world initialized");
 }

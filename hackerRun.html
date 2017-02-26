@@ -13,12 +13,23 @@
     <script src="./js/SimplePromise.js"></script>
     <script src="./js/matterD3Renderer.js"></script>
 
+    <script src="./js/effects.js"></script>
     <script src="./js/init.js"></script>
     <script src="./js/create.js"></script>
     <script src="./js/events.js"></script>
 
     <meta charset="UTF-8">
     <title>Hacker Run</title>
+
+    <style>
+        text {
+            font-size: small;
+        }
+
+        text.hit {
+            font-size: 5em;
+        }
+    </style>
 
 </head>
 <body>
@@ -36,11 +47,18 @@
         rectangle(x, y, 5, 5, true);
     });
 
-    onCollisionStart(function(pair) {
+    var randomPositionX = Math.random() * (WORLD.width/3) + (WORLD.width/3);
+    var rectid = rectangle(randomPositionX, WORLD.height-20, 30, 10, true, "green");
+    rectangle(randomPositionX - 20, WORLD.height - 100, 90, 5, true, "grey");
+    rectid
+    console.log(rectid);
+
+    onCollisionStart(rectid, function(pair) {
         console.dir(pair);
+        backgroundColorFlash("red");
+        showSplash("YEEEEAAAAAA", "hit");
     });
 
-    rectangle(Math.random() * (WORLD.width/3) + (WORLD.width/3), WORLD.height-20, 30, 10, true, "red");
 </script>
 
 </body>

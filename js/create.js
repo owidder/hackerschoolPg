@@ -19,5 +19,5 @@ function rectangle(x, y, width, height, isStatic, color) {
     });
     Matter.World.add(WORLD.engine.world, [rectangle]);
 
-    return rectangle;
+    return rectangle.id;
 }

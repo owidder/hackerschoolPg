@@ -60,9 +60,12 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
 
         data.enter()
             .append("path")
+            .attr("id", function (d) {
+                return "id-" + d.id;
+            })
             .attr("class", createClassNameFromBodyForStatic)
             .attr("style", function (d) {
-                return "fill: " + (d.color != null ? d.color : "grey")
+                return "fill: " + (d.color != null ? d.color : "black")
             })
             .attr("d", createPathFromBody);
 
