@@ -21,6 +21,7 @@ WORLD.init = function() {
 
     WORLD.engine = engine;
     WORLD.gDynamic = gDynamic;
+    WORLD.gStatic = gStatic;
     WORLD.svg = svg;
     WORLD.width = width;
     WORLD.height = height;
