@@ -42,19 +42,19 @@
 
     WORLD.onTouch(function(x, y) {
         if(y < 100) {
-            WORLD.circle(x, y, 10, false, "blue");
+            WORLD.circleBody(x, y, 10, false, "blue");
         }
     });
 
-    WORLD.onTouchMove(function (x, y) {
+    WORLD.onTouchMove(function(x, y) {
         if(y >= 100) {
-            WORLD.rectangle(x, y, 5, 5, true);
+            WORLD.rectangleBody(x, y, 5, 5, true);
         }
     });
 
     var randomPositionX = Math.random() * (WORLD.width/3) + (WORLD.width/3);
-    var rectid = WORLD.rectangle(randomPositionX, WORLD.height-20, 30, 10, true, "green");
-    WORLD.rectangle(WORLD.width/2, WORLD.height - 100, WORLD.width - 300, 5, true, "grey");
+    var rectid = WORLD.rectangleBody(randomPositionX, WORLD.height-20, 30, 10, true, "green");
+    WORLD.rectangleBody(WORLD.width/2, WORLD.height - 100, WORLD.width - 300, 5, true, "grey");
     console.log(rectid);
 
     WORLD.onCollisionStart(rectid, function(pair) {

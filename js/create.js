@@ -1,6 +1,6 @@
 'use strict';
 
-WORLD.circle = function(x, y, r, isStatic, color) {
+WORLD.circleBody = function(x, y, r, isStatic, color) {
     if(isStatic == null) {
         isStatic = false;
     }
@@ -10,7 +10,7 @@ WORLD.circle = function(x, y, r, isStatic, color) {
     Matter.World.add(WORLD.engine.world, [circle]);
 };
 
-WORLD.rectangle = function(x, y, width, height, isStatic, color) {
+WORLD.rectangleBody = function(x, y, width, height, isStatic, color) {
     if(isStatic == null) {
         isStatic = false;
     }
