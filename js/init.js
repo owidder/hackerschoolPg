@@ -8,6 +8,7 @@ WORLD.init = function() {
     var svg = d3.select("#field")
         .attr("width", width)
         .attr("height", height);
+    var gNobodies = svg.append("g");
     var gStatic = svg.append("g");
     var gDynamic = svg.append("g");
 
@@ -22,6 +23,7 @@ WORLD.init = function() {
     WORLD.engine = engine;
     WORLD.gDynamic = gDynamic;
     WORLD.gStatic = gStatic;
+    WORLD.gNobodies = gNobodies;
     WORLD.svg = svg;
     WORLD.width = width;
     WORLD.height = height;
