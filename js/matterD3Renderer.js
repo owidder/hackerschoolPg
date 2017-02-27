@@ -78,7 +78,7 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
 
     function renderD3Dynamic() {
         var dynamicOthers = Matter.Composite.allBodies(engine.world).filter(function(body) {
-            return isDynamic(body) && !isCircle(body);
+            return !isCircle(body);
         });
 
         var dataOthers = gDynamic.selectAll("path.dynamic")
@@ -100,7 +100,7 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
         dataOthers.exit().remove();
 
         var dynamicCircles = Matter.Composite.allBodies(engine.world).filter(function(body) {
-            return isDynamic(body) && isCircle(body);
+            return isCircle(body);
         });
 
         var dataCircles = gDynamic.selectAll("circle.dynamic")
@@ -160,9 +160,9 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
     }
 
     this.constructor.prototype.renderD3 = function() {
-        if(gStatic != null) {
-            renderD3Static();
-        }
+        // if(gStatic != null) {
+        //     renderD3Static();
+        // }
         if(gDynamic != null) {
             renderD3Dynamic();
             renderD3DynamicTitles();
