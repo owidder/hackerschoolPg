@@ -64,31 +64,15 @@
         WORLD.showSplash("YEEEEAAAAAA", "hit");
     });
 
-    setInterval(function () {
-        var direction = r.direction;
-        if(direction == null) {
-            direction = "left";
-            r.direction = direction;
-        }
-        var x = r.position.x;
-        var y = r.position.y;
-        if(direction == "left") {
-            if(x > 20) {
-                Matter.Body.setPosition(r, {x: x-1, y: y});
-            }
-            else {
-                r.direction = "right";
-            }
-        }
-        else {
-            if(x < WORLD.width - 20) {
-                Matter.Body.setPosition(r, {x: x+1, y: y});
-            }
-            else {
-                r.direction = "left";
-            }
-        }
-    }, 100);
+    function moveToLeft() {
+        WORLD.moveBody(rectid, 10, 0).then(moveToRight);
+    }
+
+    function moveToRight() {
+        WORLD.moveBody(rectid, 10, 0).then(moveToLeft());
+    }
+
+    moveToLeft();
 
 </script>
 

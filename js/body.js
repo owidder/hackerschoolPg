@@ -22,16 +22,18 @@ WORLD.rectangleBody = function(cx, cy, width, height, isStatic, color) {
     return rectangle.id;
 };
 
-WORLD.moveBody = function(bodyId, toX, toY, duration) {
+WORLD.moveBody = function(bodyId, duration, toX, toY) {
     var finishedPromise = new SimplePromise();
 
     function oneStep() {
         var body = Matter.Composite.get(WORLD.engine.world, bodyId, "body");
         var currentX = body.position.x;
         var currentY = body.position.y;
-        var directionX = Math.sign(toX - currentX);
-        var directionY = Math.sign(toY - currentY);
-        if(directionX == 0 && directionY == 0) {
+        var _toX = (toX == null ? currentX : toX);
+        var _toY = (toY == null ? currentY : toY);
+        var directionX = Math.sign(_toX - currentX);
+        var directionY = Math.sign(_toY - currentY);
+        if(Math.abs(directionX) < 2 && Math.abs(directionY) < 2) {
             finishedPromise.resolve();
         }
         else {
