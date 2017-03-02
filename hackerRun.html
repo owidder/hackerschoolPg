@@ -56,9 +56,9 @@
     WORLD.rectangle(0, 0, WORLD.width, 100, "lightgrey");
 
     var rectid = WORLD.rectangleBody(WORLD.width / 2, WORLD.height-20, 30, 10, true, "green");
-    WORLD.rectangleBody(WORLD.width/2, WORLD.height - 100, WORLD.width - 300, 5, true, "grey");
+    var rectid2 = WORLD.rectangleBody(WORLD.width/2, WORLD.height - 100, WORLD.width - 300, 5, true, "grey");
 
-    WORLD.onCollisionStart(rectid, function(pair) {
+    WORLD.onCollisionStart(rectid, function() {
         WORLD.backgroundColorFlash("red");
         WORLD.showSplash("YEEEEAAAAAA", "hit");
     });
