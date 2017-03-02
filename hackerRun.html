@@ -39,11 +39,12 @@
 <svg id="field"></svg>
 
 <script>
+    alert("Fange den roten Balken mit einer Kugel, die du erzeugst, indem du auf das graue Feld drückst. Mit deinen courser erzeugst du Schienen die dir helfen den Balken zu fangen. Achte darauf, dass dein Ball den grauen Balken nicht trifft.  ")
     WORLD.init();
 
     WORLD.onTouch(function(x, y) {
         if(y < 100) {
-            WORLD.circleBody(x, y, 10, false, "blue");
+            WORLD.circleBody(x, y, 10, false, "pink");
         }
     });
 
@@ -55,23 +56,50 @@
 
     WORLD.rectangle(0, 0, WORLD.width, 100, "lightgrey");
 
-    var rectid = WORLD.rectangleBody(WORLD.width / 2, WORLD.height-20, 30, 10, true, "green");
-    var rectid2 = WORLD.rectangleBody(WORLD.width/2, WORLD.height - 100, WORLD.width - 300, 5, true, "grey");
 
-    WORLD.onCollisionStart(rectid, function() {
-        WORLD.backgroundColorFlash("red");
-        WORLD.showSplash("YEEEEAAAAAA", "hit");
+    var rectid2 = WORLD.rectangleBody(WORLD.width/2, WORLD.height - 100, WORLD.width - 300, 5, true, "grey");
+    var rectid3 = WORLD.rectangleBody(WORLD.width / 2, WORLD.height-20, 30, 10, true, "red");
+    var gewinn = 0;
+    var verloren = 0;
+
+    WORLD.onCollisionStart(rectid3, function() {
+        WORLD.backgroundColorFlash("yellow");
+        WORLD.showSplash("+1", "hit");
+        gewinn = gewinn + 1
     });
 
+    WORLD.onCollisionStart(rectid2, function() {
+        WORLD.backgroundColorFlash("blue");
+        WORLD.showSplash("LOSER", "hit");
+        verloren = verloren + 1;
+    });
+
+
+
     function moveToLeft() {
-        WORLD.moveBody(rectid, 10, 0).then(moveToRight);
+        WORLD.moveBody(rectid3, 5, 10, 20).then(moveToRight);
     }
 
     function moveToRight() {
-        WORLD.moveBody(rectid, 10, WORLD.width).then(moveToLeft);
+        WORLD.moveBody(rectid3, 5, 900, 600, WORLD.width).then(moveToLeft);
     }
 
+
     moveToLeft();
+
+
+// Ich will das man nach 10 mal gewonnen hat aber das funtioniert irgendwie nicht und bei 2 mal grauer Balken dass
+    // game over steht wieso funktioniert das nicht? :(
+    if (gewinn = 10) {
+        World.backroundColourFlash("yellow");
+        World.showSplash("Gewonnen!!!");
+    }
+
+    if (verloren = 3) {
+        WORLD.backgroundColorFlash("blue");
+        WORLD.showSplash("GAME OVER", "hit");
+
+    }
 
 </script>
 
