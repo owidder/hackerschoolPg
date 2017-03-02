@@ -55,8 +55,7 @@
 
     WORLD.rectangle(0, 0, WORLD.width, 100, "lightgrey");
 
-    var randomPositionX = Math.random() * (WORLD.width/3) + (WORLD.width/3);
-    var rectid = WORLD.rectangleBody(randomPositionX, WORLD.height-20, 30, 10, true, "green");
+    var rectid = WORLD.rectangleBody(WORLD.width / 2, WORLD.height-20, 30, 10, true, "green");
     WORLD.rectangleBody(WORLD.width/2, WORLD.height - 100, WORLD.width - 300, 5, true, "grey");
 
     WORLD.onCollisionStart(rectid, function(pair) {
@@ -69,7 +68,7 @@
     }
 
     function moveToRight() {
-        WORLD.moveBody(rectid, 10, 0).then(moveToLeft());
+        WORLD.moveBody(rectid, 10, WORLD.width).then(moveToLeft);
     }
 
     moveToLeft();
