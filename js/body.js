@@ -10,6 +10,15 @@ WORLD.circleBody = function(cx, cy, r, isStatic, color) {
     Matter.World.add(WORLD.engine.world, [circle]);
 };
 
+WORLD.removeBody = function(body) {
+    Matter.World.remove(WORLD.engine.world, body);
+};
+
+WORLD.removeBodyWithId = function(bodyId) {
+    var body = Matter.Composite.get(WORLD.engine.world, bodyId, "body");
+    WORLD.removeBody(body);
+};
+
 WORLD.rectangleBody = function(cx, cy, width, height, isStatic, color) {
     if(isStatic == null) {
         isStatic = false;
@@ -22,30 +31,22 @@ WORLD.rectangleBody = function(cx, cy, width, height, isStatic, color) {
     return rectangle.id;
 };
 
-WORLD.Mover = function(body, duration, toX, toY, promise) {
-    var that = this;
-
-    that.toX = toX;
-    that.toY = toY;
-    that.body = body;
-    that.promise = promise;
-    that.duration = duration;
-
-    that.move = function() {
-        var currentX = that.body.position.x;
-        var currentY = that.body.position.y;
-        var diffX = that.toX - currentX;
-        var diffY = that.toY - currentY;
-        var directionX = Math.sign(diffX);
-        var directionY = Math.sign(diffY);
-        if(Math.abs(diffX) < 2 && Math.abs(diffY) < 2) {
-            that.promise.resolve();
-        }
-        else {
-            Matter.Body.setPosition(that.body, {x: currentX + directionX, y: currentY + directionY});
-            setTimeout(that.move, that.duration);
-        }
-    };
+WORLD.moveRecursive = function (body, duration, toX, toY, promise) {
+    var currentX = body.position.x;
+    var currentY = body.position.y;
+    var diffX = toX - currentX;
+    var diffY = toY - currentY;
+    var directionX = Math.sign(diffX);
+    var directionY = Math.sign(diffY);
+    if(Math.abs(diffX) < 2 && Math.abs(diffY) < 2) {
+        promise.resolve();
+    }
+    else {
+        Matter.Body.setPosition(body, {x: currentX + directionX, y: currentY + directionY});
+        setTimeout(function () {
+            WORLD.moveRecursive(body, duration, toX, toY, promise);
+        }, duration);
+    }
 };
 
 WORLD.moveBody = function(bodyId, duration, toX, toY) {
@@ -56,6 +57,6 @@ WORLD.moveBody = function(bodyId, duration, toX, toY) {
     var _toX = (toX == null ? currentX : toX);
     var _toY = (toY == null ? currentY : toY);
 
-    (new WORLD.Mover(body, duration, _toX, _toY, finishedPromise)).move();
+    WORLD.moveRecursive(body, duration, _toX, _toY, finishedPromise)
     return finishedPromise.promise;
 };

@@ -50,7 +50,10 @@
 
     WORLD.onTouchMove(function(x, y) {
         if(y >= 100) {
-            WORLD.rectangleBody(x, y, 5, 5, true);
+            var id = WORLD.rectangleBody(x, y, 5, 5, true);
+            setTimeout(function () {
+                WORLD.removeBodyWithId(id)
+            }, 1000);
         }
     });
 
