@@ -10,8 +10,13 @@ WORLD.circleBody = function(cx, cy, r, isStatic, color) {
     Matter.World.add(WORLD.engine.world, [circle]);
 };
 
-WORLD.removeBody = function(bodyId) {
-    // not yet implemented
+WORLD.removeBody = function(body) {
+    Matter.World.remove(WORLD.engine.world, body);
+};
+
+WORLD.removeBodyWithId = function(bodyId) {
+    var body = Matter.Composite.get(WORLD.engine.world, bodyId, "body");
+    WORLD.removeBody(body);
 };
 
 WORLD.rectangleBody = function(cx, cy, width, height, isStatic, color) {
