@@ -44,16 +44,31 @@
         }, 10000);
     });
 
-    for(var ctr = 0; ctr < 10; ctr++) {
+    function createRandomRect(color) {
         var randomX = Math.random() * WORLD.width;
         var randomY = Math.random() * WORLD.height/2 + WORLD.height/2 ;
         var randomLength = Math.random() * 30 + 20;
 
-        var rectid = WORLD.rectangleBody(randomX, randomY, randomLength, 10, true, "green");
+        var rectid = WORLD.rectangleBody(randomX, randomY, randomLength, 10, true, color);
 
-        WORLD.onCollisionStart(rectid, function() {
+        return rectid;
+    }
+
+    for(var ctr = 0; ctr < 5; ctr++) {
+        var redRectid = createRandomRect("red");
+
+        WORLD.onCollisionStart(redRectid, function() {
             WORLD.backgroundColorFlash("red");
             WORLD.showSplash("Ouuuch!!!");
+        });
+    }
+
+    for(var ctr = 0; ctr < 5; ctr++) {
+        var greenRectid = createRandomRect("green");
+
+        WORLD.onCollisionStart(greenRectid, function() {
+            WORLD.backgroundColorFlash("green");
+            WORLD.showSplash("Yeaaaa!!!");
         });
     }
 
