@@ -61,14 +61,15 @@
 
 
     var rectid2 = WORLD.rectangleBody(WORLD.width/2, WORLD.height - 100, WORLD.width - 300, 5, true, "grey");
-    var rectid3 = WORLD.rectangleBody(WORLD.width / 2, WORLD.height-20, 30, 10, true, "red");
+    var rectid3 = WORLD.rectangleBody(WORLD.width / 2, WORLD.height-30, 30, 10, true, "red");
     var gewinn = 0;
     var verloren = 0;
 
     WORLD.onCollisionStart(rectid3, function() {
         WORLD.backgroundColorFlash("yellow");
         WORLD.showSplash("+1", "hit");
-        gewinn = gewinn + 1
+        gewinn = gewinn + 1;
+
         if (gewinn == 10) {
             World.backroundColourFlash("yellow");
             World.showSplash("Gewonnen!!!");
