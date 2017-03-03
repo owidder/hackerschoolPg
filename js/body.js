@@ -8,6 +8,8 @@ WORLD.circleBody = function(cx, cy, r, isStatic, color) {
         isStatic: isStatic, color: color
     });
     Matter.World.add(WORLD.engine.world, [circle]);
+
+    return circle.id;
 };
 
 WORLD.removeBody = function(body) {
