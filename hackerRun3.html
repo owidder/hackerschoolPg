@@ -60,7 +60,7 @@
             function removeIfCircle(body) {
                 if (body.label.startsWith("Circle")) {
                     WORLD.removeBody(body);
-
+                    nextCircle();
                 }
             }
 
@@ -77,7 +77,7 @@
         });
     }
 
-    setInterval(function () {
+    function nextCircle() {
         var randomX = Math.random() * WORLD.width;
         var kugelId = WORLD.circleBody(randomX, -20, 10, false, "pink");
 
@@ -85,9 +85,17 @@
             WORLD.backgroundColorFlash("red");
             WORLD.showSplash("-1", "hit");
             WORLD.removeBodyWithId(kugelId);
+            nextCircle();
         });
 
-    }, 3000);
+        setInterval(function () {
+            if(WORLD.removeBodyIfOutOfScreen(kugelId)) {
+                nextCircle();
+            }
+        }, 100);
+    }
+
+    nextCircle();
 
     function moveToLeft() {
         WORLD.moveBody(rectid, 10, 10, 20).then(moveToRight);

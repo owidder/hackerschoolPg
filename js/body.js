@@ -16,6 +16,16 @@ WORLD.removeBody = function(body) {
     Matter.World.remove(WORLD.engine.world, body);
 };
 
+WORLD.removeBodyIfOutOfScreen = function(bodyId) {
+    var body = Matter.Composite.get(WORLD.engine.world, bodyId, "body");
+    if((body.position.x < 0 || body.position.x > WORLD.width) && (body.position.y < 0 || body.position.x > WORLD.height)) {
+        WORLD.removeBody(body);
+        return true;
+    }
+
+    return false;
+};
+
 WORLD.removeBodyWithId = function(bodyId) {
     var body = Matter.Composite.get(WORLD.engine.world, bodyId, "body");
     WORLD.removeBody(body);
