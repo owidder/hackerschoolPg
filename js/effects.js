@@ -13,14 +13,20 @@ WORLD.backgroundColorFlash = function(color) {
         });
 };
 
-WORLD.showSplash = function(message, className) {
+WORLD.showSplash = function(message, x, y, className) {
     if(className == null) {
         className = "";
     }
+    if(x == null) {
+        x = WORLD.width/2;
+    }
+    if(y == null) {
+        y = WORLD.height/2;
+    }
     WORLD.svg.append("text")
         .attr("class", "message " + className)
-        .attr("x", WORLD.width/4)
-        .attr("y", WORLD.height/2)
+        .attr("x", x)
+        .attr("y", y)
         .style("opacity", 0)
         .text(message);
 
