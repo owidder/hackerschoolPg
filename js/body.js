@@ -1,5 +1,9 @@
 'use strict';
 
+WORLD.addRemovePromise = function(body) {
+    body.removePromise = new SimplePromise();
+};
+
 WORLD.circleBody = function(cx, cy, r, isStatic, color) {
     if(isStatic == null) {
         isStatic = false;
@@ -7,6 +11,7 @@ WORLD.circleBody = function(cx, cy, r, isStatic, color) {
     var circle = Matter.Bodies.circle(cx, cy, r, {
         isStatic: isStatic, color: color
     });
+    WORLD.addRemovePromise(circle);
     Matter.World.add(WORLD.engine.world, [circle]);
 
     return circle.id;
@@ -21,6 +26,21 @@ WORLD.removeBodyWithId = function(bodyId) {
     WORLD.removeBody(body);
 };
 
+WORLD.makeBodyDynamic = function(bodyId) {
+    var body = WORLD.getBodyFromId(bodyId);
+    Matter.Body.setStatic(body, false);
+};
+
+WORLD.makeBodyStatic = function(bodyId) {
+    var body = WORLD.getBodyFromId(bodyId);
+    Matter.Body.setStatic(body, true);
+};
+
+WORLD.getBodyFromId = function(bodyId) {
+    var body = Matter.Composite.get(WORLD.engine.world, bodyId, "body");
+    return body;
+};
+
 WORLD.rectangleBody = function(cx, cy, width, height, isStatic, color) {
     if(isStatic == null) {
         isStatic = false;
@@ -28,6 +48,7 @@ WORLD.rectangleBody = function(cx, cy, width, height, isStatic, color) {
     var rectangle = Matter.Bodies.rectangle(cx, cy, width, height, {
         isStatic: isStatic, color: color
     });
+    WORLD.addRemovePromise(rectangle);
     Matter.World.add(WORLD.engine.world, [rectangle]);
 
     return rectangle.id;
@@ -61,4 +82,21 @@ WORLD.moveBody = function(bodyId, duration, toX, toY) {
 
     WORLD.moveRecursive(body, duration, _toX, _toY, finishedPromise)
     return finishedPromise.promise;
+};
+
+WORLD.gc = function() {
+    function isDynamic(body) {
+        return !body.isStatic;
+    }
+    var dynamicBodies = Matter.Composite.allBodies(engine.world).filter(isDynamic);
+    dynamicBodies.forEach(function(body) {
+        if(body.position.x > WORLD.width) {
+            body.removePromise.resolve();
+            WORLD.removeBody(body);
+        }
+    })
+};
+
+WORLD.startGc = function () {
+    setInterval(WORLD.gc, 1000);
 };

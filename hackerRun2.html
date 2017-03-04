@@ -38,10 +38,15 @@
     WORLD.init();
 
     WORLD.onTouchMove(function(x, y) {
-        var id = WORLD.rectangleBody(x, y, 5, 5, true);
+        var id = WORLD.rectangleBody(x, y, 5, 5, false);
         setTimeout(function () {
-            WORLD.removeBodyWithId(id)
+            Matter.Body.setMass(WORLD.getBodyFromId(id), 0);
+        }, 100);
+/*
+        setTimeout(function () {
+            WORLD.makeBodyDynamic(id)
         }, 10000);
+*/
     });
 
     function createRandomRect(color) {
