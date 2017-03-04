@@ -52,3 +52,6 @@ WORLD.showSplash = function(message, fontSize, x, y, className) {
         });
 }
 
+WORLD.createDisplay = function(x, y) {
+    
+};
