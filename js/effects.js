@@ -13,7 +13,7 @@ WORLD.backgroundColorFlash = function(color) {
         });
 };
 
-WORLD.showSplash = function(message, x, y, className) {
+WORLD.showSplash = function(message, fontSize, x, y, className) {
     if(className == null) {
         className = "";
     }
@@ -22,6 +22,12 @@ WORLD.showSplash = function(message, x, y, className) {
     }
     if(y == null) {
         y = WORLD.height/2;
+    }
+    if(fontSize == null) {
+        fontSize = "5em";
+    }
+    else if(!isNaN(fontSize)) {
+        fontSize += "em";
     }
     WORLD.svg.append("text")
         .attr("class", "message " + className)
