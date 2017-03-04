@@ -1,5 +1,8 @@
 'use strict';
 
+/* global WORLD */
+/* global d3 */
+
 WORLD.backgroundColorFlash = function(color) {
     d3.selectAll("svg")
         .transition()

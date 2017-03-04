@@ -1,5 +1,9 @@
 'use strict';
 
+/* global WORLD */
+/* global SimplePromise */
+/* global Matter */
+
 WORLD.addRemovePromise = function(body) {
     body.removePromise = new SimplePromise();
 };
@@ -88,7 +92,7 @@ WORLD.gc = function() {
     function isDynamic(body) {
         return !body.isStatic;
     }
-    var dynamicBodies = Matter.Composite.allBodies(engine.world).filter(isDynamic);
+    var dynamicBodies = Matter.Composite.allBodies(WORLD.engine.world).filter(isDynamic);
     dynamicBodies.forEach(function(body) {
         if(body.position.x > WORLD.width) {
             body.removePromise.resolve();

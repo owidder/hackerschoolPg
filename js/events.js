@@ -1,5 +1,10 @@
 'use strict';
 
+/* global WORLD */
+/* global $ */
+/* global TouchEmulator */
+/* global Matter */
+
 WORLD.onClick = function(func) {
     $(document).click(function (event) {
         func(event.clientX, event.clientY, event);
