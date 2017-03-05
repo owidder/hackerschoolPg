@@ -63,6 +63,8 @@
             WORLD.backgroundColorFlash("red");
             WORLD.showSplash("Ouuuch!!!");
         });
+        
+        endlessMove(redRectid);
     }
 
     for(var ctr = 0; ctr < 5; ctr++) {
@@ -72,6 +74,25 @@
             WORLD.backgroundColorFlash("green");
             WORLD.showSplash("Yeaaaa!!!");
         });
+        
+        endlessMove(greenRectid);
+    }
+    
+    function endlessMove(rectid) {
+        function moveToLeft() {
+            WORLD.moveBody(rectid, 1000, 0).then(moveToRight);
+        }
+    
+        function moveToRight() {
+            WORLD.moveBody(rectid, 1000, WORLD.width).then(moveToLeft);
+        }
+     
+        if(Math.random() < 0.5) {
+            moveToLeft();
+        }   
+        else {
+            moveToRight();
+        }
     }
 
     setInterval(function () {
