@@ -1,5 +1,7 @@
 'use strict';
 
+/* global WORLD */
+
 WORLD.circle = function(cx, cy, r, color, className) {
     if(className == null) {
         className = "";

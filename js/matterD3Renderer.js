@@ -1,5 +1,8 @@
 'use strict';
 
+/* global Matter */
+
+
 function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
     var gStatic = _gStatic;
     var gDynamic = _gDynamic;

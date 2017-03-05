@@ -1,5 +1,10 @@
 'use strict';
 
+/* global WORLD */
+/* global Matter */
+/* global MatterD3Renderer */
+/* global d3 */
+
 WORLD.init = function() {
 
     var width = window.innerWidth;
