@@ -94,7 +94,7 @@ WORLD.gc = function() {
     }
     var dynamicBodies = Matter.Composite.allBodies(WORLD.engine.world).filter(isDynamic);
     dynamicBodies.forEach(function(body) {
-        if(body.position.x > WORLD.width) {
+        if(body.position.y > WORLD.height) {
             body.removePromise.resolve();
             WORLD.removeBody(body);
         }

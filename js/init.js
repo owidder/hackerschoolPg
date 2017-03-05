@@ -34,4 +34,6 @@ WORLD.init = function() {
     WORLD.height = height;
 
     WORLD.showSplash("world initialized");
+    
+    WORLD.startGc();
 };
