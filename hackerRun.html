@@ -28,7 +28,7 @@
             font-size: small;
         }
 
-        text.hit {
+        .hit {
             font-size: 5em;
         }
     </style>
@@ -39,6 +39,9 @@
 <svg id="field"></svg>
 
 <script>
+
+    /* global WORLD */
+    
     WORLD.init();
 
     WORLD.onTouch(function(x, y) {
