@@ -29,7 +29,7 @@ WORLD.showSplash = function(message, fontSize, x, y, className) {
     if(fontSize == null) {
         fontSize = "5em";
     }
-    else if(!isNaN(fontSize)) {
+    if(!isNaN(fontSize)) {
         fontSize += "em";
     }
     WORLD.svg.append("text")
@@ -37,12 +37,13 @@ WORLD.showSplash = function(message, fontSize, x, y, className) {
         .attr("x", x)
         .attr("y", y)
         .style("opacity", 0)
+        .style("font-size", fontSize)
         .text(message);
 
     WORLD.svg.selectAll("text.message")
         .transition()
         .duration(1000)
-        .style("opacity", 1)
+        .style("opacity", 0.7)
         .on("end", function() {
             WORLD.svg.selectAll("text.message")
                 .transition()

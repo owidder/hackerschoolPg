@@ -60,32 +60,36 @@
     for(ctr = 0; ctr < 5; ctr++) {
         var redRectid = createRandomRect("red");
 
-        WORLD.onCollisionStart(redRectid, function() {
+        WORLD.onCollisionStart(redRectid, function(pair) {
             WORLD.backgroundColorFlash("red");
-            WORLD.showSplash("Ouuuch!!!");
+            WORLD.showSplash("Ouuuch!!!", 1.5, pair.bodyA.position.x, pair.bodyA.position.y);
         });
         
-        endlessMove(redRectid);
+        if(Math.random() < 0.5) {
+            endlessMove(redRectid);
+        }
     }
 
     for(ctr = 0; ctr < 5; ctr++) {
         var greenRectid = createRandomRect("green");
 
-        WORLD.onCollisionStart(greenRectid, function() {
+        WORLD.onCollisionStart(greenRectid, function(pair) {
             WORLD.backgroundColorFlash("green");
-            WORLD.showSplash("Yeaaaa!!!");
+            WORLD.showSplash("Yeaaaa!!!", 1.5, pair.bodyA.position.x, pair.bodyA.position.y);
         });
         
-        endlessMove(greenRectid);
+        if(Math.random() < 0.5) {
+            endlessMove(greenRectid);
+        }
     }
     
     function endlessMove(rectid) {
         function moveToLeft() {
-            WORLD.moveBody(rectid, 1000, 0).then(moveToRight);
+            WORLD.moveBody(rectid, Math.random() * 300 + 100, 0).then(moveToRight);
         }
     
         function moveToRight() {
-            WORLD.moveBody(rectid, 1000, WORLD.width).then(moveToLeft);
+            WORLD.moveBody(rectid, Math.random() * 300 + 100, WORLD.width).then(moveToLeft);
         }
      
         if(Math.random() < 0.5) {
