@@ -56,7 +56,8 @@
         return rectid;
     }
 
-    for(var ctr = 0; ctr < 5; ctr++) {
+    var ctr;
+    for(ctr = 0; ctr < 5; ctr++) {
         var redRectid = createRandomRect("red");
 
         WORLD.onCollisionStart(redRectid, function() {
@@ -67,7 +68,7 @@
         endlessMove(redRectid);
     }
 
-    for(var ctr = 0; ctr < 5; ctr++) {
+    for(ctr = 0; ctr < 5; ctr++) {
         var greenRectid = createRandomRect("green");
 
         WORLD.onCollisionStart(greenRectid, function() {
