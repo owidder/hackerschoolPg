@@ -85,11 +85,11 @@
     
     function endlessMove(rectid) {
         function moveToLeft() {
-            WORLD.moveBody(rectid, Math.random() * 300 + 100, 0).then(moveToRight);
+            WORLD.moveBody(rectid, Math.random() * 100 + 100, 0).then(moveToRight);
         }
     
         function moveToRight() {
-            WORLD.moveBody(rectid, Math.random() * 300 + 100, WORLD.width).then(moveToLeft);
+            WORLD.moveBody(rectid, Math.random() * 100 + 100, WORLD.width).then(moveToLeft);
         }
      
         if(Math.random() < 0.5) {
