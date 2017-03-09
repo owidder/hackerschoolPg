@@ -16,6 +16,35 @@ WORLD.backgroundColorFlash = function(color) {
         });
 };
 
+WORLD.showText = function(id, text, x, y, fontSize, className) {
+    WORLD.svg.selectAll("text#" + id)
+        .data([id])
+        .enter()
+        .append("text")
+        .attr("id", id)
+        .attr("message " + className)
+        .attr("x", x)
+        .attr("y", y)
+        .style("font-size", fontSize)
+        .text(text);
+        
+    WORLD.svg.selectAll("text#" + id)
+        .attr("x", x)
+        .attr("y", y)
+        .style("font-size", fontSize)
+        .text(text);
+};
+
+WORLD.removeText = function(id) {
+    WORLD.svg.selectAll("text#" + id)
+        .data([])
+        .exit()
+        .transition()
+        .duration(1000)
+        .style("opacity", 0)
+        .remove();
+};
+
 WORLD.showSplash = function(message, fontSize, x, y, className) {
     if(className == null) {
         className = "";
@@ -68,6 +97,11 @@ WORLD.uuid = function() {
 
 WORLD.displayMap = {};
 
-WORLD.createDisplay = function(x, y) {
+WORLD.createDisplay = function(text, x, y) {
     var id = WORLD.uuid();
+    WORLD.displayMap[id] = {
+        x: x,
+        y: y,
+        text: text
+    };
 };
