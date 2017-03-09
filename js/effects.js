@@ -61,38 +61,11 @@ WORLD.showSplash = function(message, fontSize, x, y, className) {
     if(!isNaN(fontSize)) {
         fontSize += "em";
     }
-    WORLD.svg.append("text")
-        .attr("class", "message " + className)
-        .attr("x", x)
-        .attr("y", y)
-        .style("opacity", 0)
-        .style("font-size", fontSize)
-        .text(message);
+    
+    var id = WORLD.uuid();
 
-    WORLD.svg.selectAll("text.message")
-        .transition()
-        .duration(1000)
-        .style("opacity", 0.7)
-        .on("end", function() {
-            WORLD.svg.selectAll("text.message")
-                .transition()
-                .duration(1000)
-                .style("opacity", 0)
-                .on("end", function () {
-                    WORLD.svg.selectAll("text.message")
-                        .remove();
-                });
-        });
-};
-
-WORLD.uuid = function() {
-    function s4() {
-        return Math.floor((1 + Math.random()) * 0x10000)
-            .toString(16)
-            .substring(1);
-    }
-    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-        s4() + '-' + s4() + s4() + s4();
+    WORLD.showText(id, message, x, y, fontSize, className);
+    WORLD.removeText(id);
 };
 
 WORLD.displayMap = {};
