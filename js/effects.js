@@ -17,18 +17,18 @@ WORLD.backgroundColorFlash = function(color) {
 };
 
 WORLD.showText = function(id, text, x, y, fontSize, className) {
-    WORLD.svg.selectAll("text#" + id)
+    var svg = d3.select("svg");
+    svg.selectAll("text._" + id)
         .data([id])
         .enter()
         .append("text")
-        .attr("id", id)
-        .attr("message " + className)
+        .attr("class", "message _" + id + " " + className)
         .attr("x", x)
         .attr("y", y)
         .style("font-size", fontSize)
         .text(text);
         
-    WORLD.svg.selectAll("text#" + id)
+    svg.selectAll("text._" + id)
         .attr("x", x)
         .attr("y", y)
         .style("font-size", fontSize)
@@ -62,7 +62,7 @@ WORLD.showSplash = function(message, fontSize, x, y, className) {
         fontSize += "em";
     }
     
-    var id = WORLD.uuid();
+    var id = WORLD.uid();
 
     WORLD.showText(id, message, x, y, fontSize, className);
     WORLD.removeText(id);
