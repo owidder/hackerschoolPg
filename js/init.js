@@ -16,6 +16,7 @@ WORLD.init = function() {
     var gNobodies = svg.append("g");
     var gStatic = svg.append("g");
     var gDynamic = svg.append("g");
+    var gText = svg.append("g");
 
     var engine = Matter.Engine.create();
 
@@ -29,6 +30,7 @@ WORLD.init = function() {
     WORLD.gDynamic = gDynamic;
     WORLD.gStatic = gStatic;
     WORLD.gNobodies = gNobodies;
+    WORLD.gText = gText;
     WORLD.svg = svg;
     WORLD.width = width;
     WORLD.height = height;

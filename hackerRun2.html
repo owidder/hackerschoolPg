@@ -40,10 +40,12 @@
 
     WORLD.init();
 
+    // var display = new WORLD.Display("0", 10, 10, 1);
+
     WORLD.onTouchMove(function(x, y) {
-        var id = WORLD.rectangleBody(x, y, 5, 5, true);
+        var rect = WORLD.rectangleBody(x, y, 5, 5, true);
         setTimeout(function () {
-            WORLD.removeBodyWithId(id);
+            WORLD.removeBodyWithId(rect);
         }, 10000);
     });
 
@@ -52,45 +54,45 @@
         var randomY = Math.random() * WORLD.height/2 + WORLD.height/2 ;
         var randomLength = Math.random() * 30 + 20;
 
-        var rectid = WORLD.rectangleBody(randomX, randomY, randomLength, 10, true, color);
+        var rect = WORLD.rectangleBody(randomX, randomY, randomLength, 10, true, color);
 
-        return rectid;
+        return rect;
     }
 
     var ctr;
     for(ctr = 0; ctr < 5; ctr++) {
-        var redRectid = createRandomRect("red");
+        var redRect = createRandomRect("red");
 
-        WORLD.onCollisionStart(redRectid, function(pair) {
+        WORLD.onCollisionStart(redRect, function(pair) {
             WORLD.backgroundColorFlash("red");
             WORLD.showSplash("Ouuuch!!!", 1.5, pair.bodyA.position.x, pair.bodyA.position.y);
         });
         
         if(Math.random() < 0.5) {
-            endlessMove(redRectid);
+            endlessMove(redRect);
         }
     }
 
     for(ctr = 0; ctr < 5; ctr++) {
-        var greenRectid = createRandomRect("green");
+        var greenRect = createRandomRect("green");
 
-        WORLD.onCollisionStart(greenRectid, function(pair) {
+        WORLD.onCollisionStart(greenRect, function(pair) {
             WORLD.backgroundColorFlash("green");
             WORLD.showSplash("Yeaaaa!!!", 1.5, pair.bodyA.position.x, pair.bodyA.position.y);
         });
         
         if(Math.random() < 0.5) {
-            endlessMove(greenRectid);
+            endlessMove(greenRect);
         }
     }
     
-    function endlessMove(rectid) {
+    function endlessMove(rect) {
         function moveToLeft() {
-            WORLD.moveBody(rectid, Math.random() * 100 + 100, 0).then(moveToRight);
+            WORLD.moveBody(rect, Math.random() * 100 + 100, 0).then(moveToRight);
         }
     
         function moveToRight() {
-            WORLD.moveBody(rectid, Math.random() * 100 + 100, WORLD.width).then(moveToLeft);
+            WORLD.moveBody(rect, Math.random() * 100 + 100, WORLD.width).then(moveToLeft);
         }
      
         if(Math.random() < 0.5) {

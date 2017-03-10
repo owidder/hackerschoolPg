@@ -18,7 +18,7 @@ WORLD.circleBody = function(cx, cy, r, isStatic, color) {
     WORLD.addRemovePromise(circle);
     Matter.World.add(WORLD.engine.world, [circle]);
 
-    return circle.id;
+    return circle;
 };
 
 WORLD.removeBody = function(body) {
@@ -55,7 +55,7 @@ WORLD.rectangleBody = function(cx, cy, width, height, isStatic, color) {
     WORLD.addRemovePromise(rectangle);
     Matter.World.add(WORLD.engine.world, [rectangle]);
 
-    return rectangle.id;
+    return rectangle;
 };
 
 WORLD.moveRecursive = function (body, duration, toX, toY, promise) {
@@ -76,9 +76,8 @@ WORLD.moveRecursive = function (body, duration, toX, toY, promise) {
     }
 };
 
-WORLD.moveBody = function(bodyId, duration, toX, toY) {
+WORLD.moveBody = function(body, duration, toX, toY) {
     var finishedPromise = new SimplePromise();
-    var body = Matter.Composite.get(WORLD.engine.world, bodyId, "body");
     var currentX = body.position.x;
     var currentY = body.position.y;
     var _toX = (toX == null ? currentX : toX);

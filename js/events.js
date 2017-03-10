@@ -52,13 +52,13 @@ WORLD.onTouchMove = function(func) {
     })
 };
 
-WORLD.onCollisionStart = function(id, func) {
+WORLD.onCollisionStart = function(body, func) {
     Matter.Events.on(WORLD.engine, 'collisionStart', function(event) {
         var pairs = event.pairs;
 
         for (var i = 0; i < pairs.length; i++) {
             var pair = pairs[i];
-            if(pair.bodyA.id == id || pair.bodyB.id == id) {
+            if(pair.bodyA.id == body.id || pair.bodyB.id == body.id) {
                 func(pair);
             }
         }

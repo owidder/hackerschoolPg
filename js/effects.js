@@ -17,18 +17,13 @@ WORLD.backgroundColorFlash = function(color) {
 };
 
 WORLD.showText = function(id, text, x, y, fontSize, className) {
-    var svg = d3.select("svg");
-    svg.selectAll("text._" + id)
+    WORLD.gText.selectAll("text._" + id)
         .data([id])
         .enter()
         .append("text")
-        .attr("class", "message _" + id + " " + className)
-        .attr("x", x)
-        .attr("y", y)
-        .style("font-size", fontSize)
-        .text(text);
-        
-    svg.selectAll("text._" + id)
+        .attr("class", "message _" + id + " " + className);
+
+    WORLD.gText.selectAll("text._" + id)
         .attr("x", x)
         .attr("y", y)
         .style("font-size", fontSize)
@@ -36,7 +31,7 @@ WORLD.showText = function(id, text, x, y, fontSize, className) {
 };
 
 WORLD.removeText = function(id) {
-    WORLD.svg.selectAll("text#" + id)
+    WORLD.gText.selectAll("text._" + id)
         .data([])
         .exit()
         .transition()
@@ -68,13 +63,48 @@ WORLD.showSplash = function(message, fontSize, x, y, className) {
     WORLD.removeText(id);
 };
 
-WORLD.displayMap = {};
+WORLD.Display = function(text, x, y, fontSize, className) {
+    function show() {
+        WORLD.showText(this.id, this.text, this.x, this.y, this.fontSize, this.className);
+    }
 
-WORLD.createDisplay = function(text, x, y) {
-    var id = WORLD.uuid();
-    WORLD.displayMap[id] = {
-        x: x,
-        y: y,
-        text: text
+    this.changeText = function (text) {
+        this.text = text;
+        show();
     };
+
+    this.move = function (x, y) {
+        this.x = x;
+        this.y = y;
+        show();
+    };
+
+    this.setFontSize = function (fontSize) {
+        this.fontSize = fontSize;
+        show()
+    };
+
+    this.add = function (a) {
+        this.text = String(parseInt(this.text) + a);
+        show();
+    };
+
+    this.sub = function (s) {
+        this.text = String(parseInt(this.text) - s);
+        show();
+    };
+
+    this.remove = function () {
+        WORLD.removeText(this.id);
+    };
+
+    this.id = WORLD.uid();
+    this.text = text;
+    this.x = x;
+    this.y = y;
+    this.fontSize = fontSize;
+    this.className = className != null ? className : "";
+
+    show();
 };
+
