@@ -45,7 +45,7 @@
     WORLD.onTouchMove(function(x, y) {
         var rect = WORLD.rectangleBody(x, y, 5, 5, true);
         setTimeout(function () {
-            WORLD.removeBodyWithId(rect);
+            WORLD.removeBody(rect);
         }, 10000);
     });
 
