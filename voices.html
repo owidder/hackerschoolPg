@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" type="text/css" href="./css/materialize.css" media="screen,projection"/>
+    <script src="./lib/handlebars.js"></script>
+    <script src="./lib/jquery-3.1.1.js"></script>
+
+    <title>Voices</title>
+
+</head>
+<body>
+
+<h1>Installed Voices in Browser</h1>
+
+    <script id="voices-table-script" type="text/x-handlebars-template">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Country</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {{#each voices}}
+                <tr>
+                    <td>
+                        {{@index}}
+                    </td>
+                    <td>
+                        {{name}}
+                    </td>
+                    <td>
+                        {{lang}}
+                    </td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </script>
+
+    <div id="voices-table"></div>
+
+    <script>
+        $(function () {
+            window.speechSynthesis.onvoiceschanged = function() {
+                var voices = window.speechSynthesis.getVoices();
+
+                $("#voices-table").empty();
+                var templateScript = $("#voices-table-script").html();
+                var template = Handlebars.compile(templateScript);
+                var ctx = {
+                    voices: voices
+                };
+                var html = template(ctx);
+                $("#voices-table").append(html);
+            };
+        });
+    </script>
+</table>
+</body>
+</html>
