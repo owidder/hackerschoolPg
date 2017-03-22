@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="./css/materialize.css" media="screen,projection"/>
     <script src="./lib/handlebars.js"></script>
     <script src="./lib/jquery-3.1.1.js"></script>
+    <script src="./lib/languageName.js"></script>
 
     <title>Voices</title>
 
@@ -34,7 +35,7 @@
                         {{name}}
                     </td>
                     <td>
-                        {{lang}}
+                        {{languageName}}
                     </td>
                 </tr>
             {{/each}}
@@ -48,6 +49,9 @@
         $(function () {
             window.speechSynthesis.onvoiceschanged = function() {
                 var voices = window.speechSynthesis.getVoices();
+                voices.forEach(function (voice) {
+                    voice.languageName = window.getLanguageName(voice.lang.split('-')[0]);
+                });
 
                 $("#voices-table").empty();
                 var templateScript = $("#voices-table-script").html();
