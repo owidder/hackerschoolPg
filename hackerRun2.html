@@ -27,6 +27,7 @@
     <style>
         text {
             font-size: 5em;
+            color: black;
         }
     </style>
 
@@ -40,7 +41,7 @@
 
     WORLD.init();
 
-    // var display = new WORLD.Display("0", 10, 10, 1);
+    var display = new WORLD.Display("0", 20, 20, 1);
 
     WORLD.onTouchMove(function(x, y) {
         var rect = WORLD.rectangleBody(x, y, 5, 5, true);
@@ -66,6 +67,7 @@
         WORLD.onCollisionStart(redRect, function(pair) {
             WORLD.backgroundColorFlash("red");
             WORLD.showSplash("Ouuuch!!!", 1.5, pair.bodyA.position.x, pair.bodyA.position.y);
+            display.sub(10);
         });
         
         if(Math.random() < 0.5) {
@@ -79,6 +81,7 @@
         WORLD.onCollisionStart(greenRect, function(pair) {
             WORLD.backgroundColorFlash("green");
             WORLD.showSplash("Yeaaaa!!!", 1.5, pair.bodyA.position.x, pair.bodyA.position.y);
+            display.add(10);
         });
         
         if(Math.random() < 0.5) {

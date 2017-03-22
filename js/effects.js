@@ -26,7 +26,7 @@ WORLD.showText = function(id, text, x, y, fontSize, className) {
     WORLD.gText.selectAll("text._" + id)
         .attr("x", x)
         .attr("y", y)
-        .style("font-size", fontSize)
+        .style("font-size", fontSize + "em")
         .text(text);
 };
 
@@ -64,8 +64,9 @@ WORLD.showSplash = function(message, fontSize, x, y, className) {
 };
 
 WORLD.Display = function(text, x, y, fontSize, className) {
+    var that = this;
     function show() {
-        WORLD.showText(this.id, this.text, this.x, this.y, this.fontSize, this.className);
+        WORLD.showText(that.id, that.text, that.x, that.y, that.fontSize, that.className);
     }
 
     this.changeText = function (text) {
