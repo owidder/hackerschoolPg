@@ -14,10 +14,12 @@
     <script src="./js/matterD3Renderer.js"></script>
 
     <script src="./js/boot.js"></script>
+    <script src="./js/util.js"></script>
     <script src="./js/effects.js"></script>
     <script src="./js/body.js"></script>
     <script src="./js/nobody.js"></script>
     <script src="./js/events.js"></script>
+    <script src="./js/speech.js"></script>
     <script src="./js/init.js"></script>
 
     <meta charset="UTF-8">
@@ -25,11 +27,8 @@
 
     <style>
         text {
-            font-size: small;
-        }
-
-        .hit {
             font-size: 5em;
+            color: black;
         }
     </style>
 
@@ -39,45 +38,81 @@
 <svg id="field"></svg>
 
 <script>
+/* global WORLD */
 
-    /* global WORLD */
-    
     WORLD.init();
 
-    WORLD.onTouch(function(x, y) {
-        if(y < 100) {
-            WORLD.circleBody(x, y, 10, false, "blue");
-        }
-    });
+    var display = new WORLD.Display("0", 20, 20, 1);
 
     WORLD.onTouchMove(function(x, y) {
-        if(y >= 100) {
-            var id = WORLD.rectangleBody(x, y, 5, 5, true);
-            setTimeout(function () {
-                WORLD.removeBodyWithId(id)
-            }, 1000);
+        var rect = WORLD.rectangleBody(x, y, 5, 5, true);
+        setTimeout(function () {
+            WORLD.removeBody(rect);
+        }, 10000);
+    });
+
+    function createRandomRect(color) {
+        var randomX = Math.random() * WORLD.width;
+        var randomY = Math.random() * WORLD.height/2 + WORLD.height/2 ;
+        var randomLength = Math.random() * 30 + 20;
+
+        var rect = WORLD.rectangleBody(randomX, randomY, randomLength, 10, true, color);
+
+        return rect;
+    }
+
+    var ctr;
+    for(ctr = 0; ctr < 5; ctr++) {
+        var redRect = createRandomRect("red");
+
+        WORLD.onCollisionStart(redRect, function(pair) {
+            WORLD.backgroundColorFlash("red");
+            WORLD.showSplash("Ouuuch!!!", 1.5, pair.bodyA.position.x, pair.bodyA.position.y);
+            WORLD.speek("Ouch");
+            display.sub(10);
+        });
+        
+        if(Math.random() < 0.5) {
+            endlessMove(redRect);
         }
-    });
-
-    WORLD.rectangle(0, 0, WORLD.width, 100, "lightgrey");
-
-    var rectid = WORLD.rectangleBody(WORLD.width / 2, WORLD.height-20, 30, 10, true, "green");
-    WORLD.rectangleBody(WORLD.width/2, WORLD.height - 100, WORLD.width - 300, 5, true, "grey");
-
-    WORLD.onCollisionStart(rectid, function(pair) {
-        WORLD.backgroundColorFlash("red");
-        WORLD.showSplash("YEEEEAAAAAA", "hit");
-    });
-
-    function moveToLeft() {
-        WORLD.moveBody(rectid, 10, 0).then(moveToRight);
     }
 
-    function moveToRight() {
-        WORLD.moveBody(rectid, 10, WORLD.width).then(moveToLeft);
+    for(ctr = 0; ctr < 5; ctr++) {
+        var greenRect = createRandomRect("green");
+
+        WORLD.onCollisionStart(greenRect, function(pair) {
+            WORLD.backgroundColorFlash("green");
+            WORLD.showSplash("Yeaaaa!!!", 1.5, pair.bodyA.position.x, pair.bodyA.position.y);
+            WORLD.speek("Yeah");
+            display.add(10);
+        });
+        
+        if(Math.random() < 0.5) {
+            endlessMove(greenRect);
+        }
+    }
+    
+    function endlessMove(rect) {
+        function moveToLeft() {
+            WORLD.moveBody(rect, Math.random() * 100 + 100, 0).then(moveToRight);
+        }
+    
+        function moveToRight() {
+            WORLD.moveBody(rect, Math.random() * 100 + 100, WORLD.width).then(moveToLeft);
+        }
+     
+        if(Math.random() < 0.5) {
+            moveToLeft();
+        }   
+        else {
+            moveToRight();
+        }
     }
 
-    moveToLeft();
+    setInterval(function () {
+        var randomX = Math.random() * WORLD.width;
+        WORLD.circleBody(randomX, -100, 10, false, "blue");
+    }, 5000);
 
 </script>
 
