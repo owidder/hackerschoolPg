@@ -23,8 +23,9 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Country</th>
-                <th>Country (native name)</th>
-                <th>Try it!</th>
+                <th>Native country name (click to here the name spoken)</th>
+                <th>Type in some text ...</th>
+                <th>... and try it!</th>
             </tr>
             </thead>
 
@@ -41,11 +42,13 @@
                         {{languageName}}
                     </td>
                     <td>
-                        <a onclick="speek('{{languageNativeName}}', {{@index}})" class="btn">{{languageNativeName}}</a>
+                        <a onclick="speekText('{{languageNativeName}}', {{@index}})" class="btn">{{languageNativeName}}</a>
                     </td>
                     <td>
                         <input placeholder="Some text to speak" id="i-{{@index}}" type="text" class="validate">
-                        <a onclick="speek('Test', {{@index}})" class="btn">Try it!</a>
+                    </td>
+                    <td>
+                        <a onclick="speekInput({{@index}})" class="btn">Try it!</a>
                     </td>
                 </tr>
             {{/each}}
@@ -61,11 +64,16 @@
         /* global Handlebars */
         /* global window */
 
-        var speek = function (text, voiceNum) {
+        var speekText = function (text, voiceNum) {
             var msg = new SpeechSynthesisUtterance(text);
             var voices = window.speechSynthesis.getVoices();
             msg.voice = voices[voiceNum];
             window.speechSynthesis.speak(msg);
+        };
+
+        var speekInput = function(voiceNum) {
+            var text = $("#i-" + voiceNum).val();
+            speekText(text, voiceNum);
         };
 
         $(function () {
