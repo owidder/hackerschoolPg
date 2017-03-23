@@ -2,11 +2,9 @@
 
 /* global WORLD */
 
-WORLD.speek = function (text, voiceName) {
-    var voiceNum = voiceName == null ? 0 : window.speechSynthesis.getVoices().filter(function (voice) {
-            voice.name == voiceName;
-        })[0];
-
+WORLD.speek = function (text, voiceNum) {
     var msg = new SpeechSynthesisUtterance(text);
+    var voices = window.speechSynthesis.getVoices();
+    msg.voice = voices[voiceNum];
     window.speechSynthesis.speak(msg);
 };
