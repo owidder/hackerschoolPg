@@ -4,6 +4,7 @@
 /* global $ */
 /* global TouchEmulator */
 /* global Matter */
+/* global d3 */
 
 WORLD.onClick = function(func) {
     $(document).click(function (event) {
@@ -19,6 +20,8 @@ WORLD.initTouch = function() {
 };
 
 WORLD.onTouchStart = function(func) {
+    
+    
     WORLD.initTouch();
     document.body.addEventListener('touchstart', function(event) {
         func(event.touches[0].clientX, event.touches[0].clientY, event);
@@ -45,11 +48,30 @@ WORLD.onTouch = function(func) {
 };
 
 WORLD.onTouchMove = function(func) {
+    WORLD.svg.call(
+        d3.drag()
+        .on('start', dragstarted)
+        .on('drag', dragged )
+        .on('end', dragend )        
+    );
+    
+    function dragstarted(){
+    }
+    
+    function dragged() {
+        func(d3.event.x, d3.event.y);
+    }
+    
+    function dragend() {
+    }
+    
+   /* 
     WORLD.initTouch();
     document.body.addEventListener('touchmove', function (event) {
         WORLD.touchMove = true;
         func(event.changedTouches[0].clientX, event.changedTouches[0].clientY, event);
     })
+    */
 };
 
 WORLD.onCollisionStart = function(body, func) {
