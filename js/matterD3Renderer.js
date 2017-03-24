@@ -79,7 +79,7 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
         data.exit().remove();
     }
 
-    function renderD3Dynamic() {
+    function renderD3Bodies() {
         var dynamicOthers = Matter.Composite.allBodies(engine.world).filter(function(body) {
             return !isCircle(body);
         });
@@ -167,7 +167,7 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
         //     renderD3Static();
         // }
         if(gDynamic != null) {
-            renderD3Dynamic();
+            renderD3Bodies();
             renderD3DynamicTitles();
         }
     }
