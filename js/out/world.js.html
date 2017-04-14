@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: world.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: world.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+/* global WORLD */
+/* global SimplePromise */
+/* global Matter */
+/* global MatterD3Renderer */
+/* global d3 */
+
+/**
+ * init the world
+ */
+WORLD.init = function() {
+
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
+    var svg = d3.select("#field")
+        .attr("width", width)
+        .attr("height", height);
+    var gNobodies = svg.append("g");
+    var gStatic = svg.append("g");
+    var gDynamic = svg.append("g");
+    var gText = svg.append("g");
+
+    var engine = Matter.Engine.create();
+
+    Matter.Engine.run(engine);
+    var d3Renderer = new MatterD3Renderer(engine, gStatic, gDynamic);
+    Matter.Events.on(engine, "afterUpdate", function () {
+        d3Renderer.renderD3();
+    });
+
+    WORLD.engine = engine;
+    WORLD.gDynamic = gDynamic;
+    WORLD.gStatic = gStatic;
+    WORLD.gNobodies = gNobodies;
+    WORLD.gText = gText;
+    WORLD.svg = svg;
+    WORLD.width = width;
+    WORLD.height = height;
+
+    WORLD.showSplash("world initialized");
+
+    WORLD.startGc();
+};
+
+/**
+ * Create a circle shaped body
+ * @param {number} cx - x coordinate of the center
+ * @param {number} cy - y coordinate of the center
+ * @param {number} r - radius
+ * @param {boolean} isStatic - true = static (default: false)
+ * @param {string} color - fill color (default: 'black')
+ * @returns the created body
+ */
+WORLD.circleBody = function(cx, cy, r, isStatic, color) {
+    if(isStatic == null) {
+        isStatic = false;
+    }
+    if(color == null) {
+        color = "black";
+    }
+    var circle = Matter.Bodies.circle(cx, cy, r, {
+        isStatic: isStatic, color: color
+    });
+    WORLD.addRemovePromise(circle);
+    Matter.World.add(WORLD.engine.world, [circle]);
+
+    return circle;
+};
+
+/**
+ * Create a rectangle shaped body
+ *
+ * @param cx - x coord of the center of the rectangle
+ * @param cy - y coord of the center of the rectangle
+ * @param width - width of the rectangle
+ * @param height - height of the rectangle
+ * @param isStatic - true = static (default: false)
+ * @param color - fill color (default: 'black')
+ * @returns the created body
+ */
+WORLD.rectangleBody = function(cx, cy, width, height, isStatic, color) {
+    if(isStatic == null) {
+        isStatic = false;
+    }
+    if(color == null) {
+        color = "black";
+    }
+
+    var rectangle = Matter.Bodies.rectangle(cx, cy, width, height, {
+        isStatic: isStatic, color: color
+    });
+    WORLD.addRemovePromise(rectangle);
+    Matter.World.add(WORLD.engine.world, [rectangle]);
+
+    return rectangle;
+};
+
+/**
+ * remove the body from the world
+ * @param body - body to remove
+ */
+WORLD.removeBody = function(body) {
+    Matter.World.remove(WORLD.engine.world, body);
+};
+
+/**
+ * move a body (stepwise) to a x/y-coordinate
+ *
+ * @param body - body to move
+ * @param duration - duration (in milliseconds) for each step
+ * @param toX - x coordinate to move to
+ * @param toY - y coordinate to move to
+ * @returns Promise that resolves, when the body has arrived
+ */
+WORLD.moveBody = function(body, duration, toX, toY) {
+    var finishedPromise = new SimplePromise();
+    var currentX = body.position.x;
+    var currentY = body.position.y;
+    var _toX = (toX == null ? currentX : toX);
+    var _toY = (toY == null ? currentY : toY);
+
+    WORLD.moveRecursive(body, duration, _toX, _toY, finishedPromise);
+    return finishedPromise.promise;
+};
+
+/**
+ * let the background flash
+ * @param color - color of the flash
+ */
+WORLD.backgroundColorFlash = function(color) {
+    d3.selectAll("svg")
+        .transition()
+        .duration(300)
+        .style("background-color", color)
+        .on("end", function () {
+            d3.selectAll("svg")
+                .transition()
+                .duration(1000)
+                .style("background-color", "white");
+        });
+};
+
+/**
+ * show a splash message
+ *
+ * @param {string} message - text of the message
+ * @param {string} fontSize - size of the text in 'em'
+ * @param {number} x - x coordinate of the text (default: WORLD.width/2)
+ * @param {number} y - y coordinate of the text (default: WORLD.height/2)
+ * @param {string} className - CSS class (default: '')
+ */
+WORLD.showSplash = function(message, fontSize, x, y, className) {
+    if(className == null) {
+        className = "";
+    }
+    if(x == null) {
+        x = WORLD.width/2;
+    }
+    if(y == null) {
+        y = WORLD.height/2;
+    }
+    if(fontSize == null) {
+        fontSize = "5em";
+    }
+    if(!isNaN(fontSize)) {
+        fontSize += "em";
+    }
+
+    var id = WORLD.uid();
+
+    WORLD.showText(id, message, x, y, fontSize, className);
+    WORLD.removeText(id);
+};
+
+/**
+ * create a display
+ *
+ * @param {string} text - initial text to show
+ * @param {number} x - x coord
+ * @param {number} y - y coord
+ * @param {number} fontSize - size of the text (in 'em')
+ * @param {string} className - CSS class (default: '')
+ * @constructor
+ */
+WORLD.Display = function(text, x, y, fontSize, className) {
+    var that = this;
+    function show() {
+        WORLD.showText(that.id, that.text, that.x, that.y, that.fontSize, that.className);
+    }
+
+    /**
+     * change the shown text
+     * @param text - new text to show
+     */
+    this.changeText = function (text) {
+        this.text = text;
+        show();
+    };
+
+    /**
+     * move the text to a new position
+     *
+     * @param {number} x - new x coordinate
+     * @param {number} y - new y coordinate
+     */
+    this.move = function (x, y) {
+        this.x = x;
+        this.y = y;
+        show();
+    };
+
+    /**
+     * set a new size of the text
+     * @param {number} fontSize - new size (in 'em')
+     */
+    this.setFontSize = function (fontSize) {
+        this.fontSize = fontSize;
+        show()
+    };
+
+    /**
+     * if the text is a number (e.g. "10"), add a value to it
+     * e.g.: "10" + 5 = "15"
+     * @param {number} a - number to add
+     */
+    this.add = function (a) {
+        this.text = String(parseInt(this.text) + a);
+        show();
+    };
+
+    /**
+     * if the text is a number (e.g. "10"), subtract a value from it
+     * e.g.: "10" - 5 = "5"
+     * @param {number} a - number to subtract
+     */
+    this.sub = function (s) {
+        this.text = String(parseInt(this.text) - s);
+        show();
+    };
+
+    /**
+     * remove the currently shown text
+     */
+    this.remove = function () {
+        WORLD.removeText(this.id);
+    };
+
+    this.id = WORLD.uid();
+    this.text = text;
+    this.x = x;
+    this.y = y;
+    this.fontSize = fontSize || 1;
+    this.className = className != null ? className : "";
+
+    show();
+};
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="WORLD.Display.html">Display</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Apr 14 2017 21:39:15 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

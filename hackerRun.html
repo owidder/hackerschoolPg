@@ -10,6 +10,7 @@
     <script src="./lib/d3.v4.js"></script>
     <script src="./lib/jquery-3.1.1.js"></script>
     <script src="./lib/hammer-2.0.8.js"></script>
+    <script src="./lib/lodash.js"></script>
 
     <script src="./js/SimplePromise.js"></script>
     <script src="./js/matterD3Renderer.js"></script>
@@ -22,6 +23,7 @@
     <script src="./js/events.js"></script>
     <script src="./js/speech.js"></script>
     <script src="./js/init.js"></script>
+    <script src="./js/world.js"></script>
 
     <meta charset="UTF-8">
     <title>Hacker Run</title>
@@ -39,7 +41,10 @@
 <svg id="field"></svg>
 
 <script>
+
 /* global WORLD */
+/* global _ */
+/* global Math */
 
     WORLD.init();
 
@@ -53,9 +58,9 @@
     });
 
     function createRandomRect(color) {
-        var randomX = Math.random() * WORLD.width;
-        var randomY = Math.random() * WORLD.height/2 + WORLD.height/2 ;
-        var randomLength = Math.random() * 30 + 20;
+        var randomX = _.random(0, WORLD.width);
+        var randomY = _.random(WORLD.height/2, WORLD.height);
+        var randomLength = _.random(30, 50);
 
         var rect = WORLD.rectangleBody(randomX, randomY, randomLength, 10, true, color);
 
@@ -72,10 +77,8 @@
             WORLD.speek("Ouch", 20);
             display.sub(10);
         });
-        
-        if(Math.random() < 0.5) {
-            endlessMove(redRect);
-        }
+
+        endlessMove(redRect);
     }
 
     for(ctr = 0; ctr < 5; ctr++) {
@@ -87,22 +90,20 @@
             WORLD.speek("Yeah", 10);
             display.add(10);
         });
-        
-        if(Math.random() < 0.5) {
-            endlessMove(greenRect);
-        }
+
+        endlessMove(greenRect);
     }
     
     function endlessMove(rect) {
         function moveToLeft() {
-            WORLD.moveBody(rect, Math.random() * 100 + 100, 0).then(moveToRight);
+            WORLD.moveBody(rect, _.random(100, 200), 0).then(moveToRight);
         }
     
         function moveToRight() {
-            WORLD.moveBody(rect, Math.random() * 100 + 100, WORLD.width).then(moveToLeft);
+            WORLD.moveBody(rect, _.random(100, 200), WORLD.width).then(moveToLeft);
         }
      
-        if(Math.random() < 0.5) {
+        if(_.random(0, 1) == 0) {
             moveToLeft();
         }   
         else {
@@ -111,7 +112,7 @@
     }
 
     setInterval(function () {
-        var randomX = Math.random() * WORLD.width;
+        var randomX = _.random(0, WORLD.width);
         WORLD.circleBody(randomX, -100, 10, false, "blue");
     }, 5000);
 
