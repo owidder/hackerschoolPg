@@ -12,17 +12,16 @@
     <script src="./lib/hammer-2.0.8.js"></script>
     <script src="./lib/lodash.js"></script>
 
-    <script src="./js/SimplePromise.js"></script>
-    <script src="./js/matterD3Renderer.js"></script>
+    <script src="./js/private/SimplePromise.js"></script>
+    <script src="./js/private/matterD3Renderer.js"></script>
 
-    <script src="./js/boot.js"></script>
-    <script src="./js/util.js"></script>
-    <script src="./js/effects.js"></script>
-    <script src="./js/body.js"></script>
-    <script src="./js/nobody.js"></script>
-    <script src="./js/events.js"></script>
-    <script src="./js/speech.js"></script>
-    <script src="./js/init.js"></script>
+    <script src="./js/private/boot.js"></script>
+    <script src="./js/private/util.js"></script>
+    <script src="./js/private/effects.js"></script>
+    <script src="./js/private/body.js"></script>
+    <script src="./js/private/nobody.js"></script>
+    <script src="./js/private/events.js"></script>
+
     <script src="./js/world.js"></script>
 
     <meta charset="UTF-8">
@@ -40,14 +39,12 @@
 
 <svg id="field"></svg>
 
+<script src="./js/private/init.js"></script>
 <script>
 
 /* global WORLD */
 /* global _ */
-/* global Math */
-
-    WORLD.init();
-
+git s
     var display = new WORLD.Display("0", 20, 20, 1);
 
     WORLD.onTouchMove(function(x, y) {

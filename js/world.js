@@ -7,44 +7,6 @@
 /* global d3 */
 
 /**
- * init the world
- */
-WORLD.init = function() {
-
-    var width = window.innerWidth;
-    var height = window.innerHeight;
-
-    var svg = d3.select("#field")
-        .attr("width", width)
-        .attr("height", height);
-    var gNobodies = svg.append("g");
-    var gStatic = svg.append("g");
-    var gDynamic = svg.append("g");
-    var gText = svg.append("g");
-
-    var engine = Matter.Engine.create();
-
-    Matter.Engine.run(engine);
-    var d3Renderer = new MatterD3Renderer(engine, gStatic, gDynamic);
-    Matter.Events.on(engine, "afterUpdate", function () {
-        d3Renderer.renderD3();
-    });
-
-    WORLD.engine = engine;
-    WORLD.gDynamic = gDynamic;
-    WORLD.gStatic = gStatic;
-    WORLD.gNobodies = gNobodies;
-    WORLD.gText = gText;
-    WORLD.svg = svg;
-    WORLD.width = width;
-    WORLD.height = height;
-
-    WORLD.showSplash("world initialized");
-
-    WORLD.startGc();
-};
-
-/**
  * Create a circle shaped body
  * @param {number} cx - x coordinate of the center
  * @param {number} cy - y coordinate of the center
@@ -257,3 +219,60 @@ WORLD.Display = function(text, x, y, fontSize, className) {
     show();
 };
 
+/**
+ * speak something with one of the browser voices
+ * @param {string} text - text to speak
+ * @param {number} voiceNum - number of the voice to use
+ * https://cdn.rawgit.com/iterawidder/hackerschoolPg/v3/voices.html
+ */
+WORLD.speek = function (text, voiceNum) {
+
+    var msg = WORLD.currentMessage;
+    if(msg == null) {
+        msg = new SpeechSynthesisUtterance(text);
+        WORLD.currentMessage = msg;
+    }
+
+    if(voiceNum != WORLD.currentVoiceNum) {
+        var voices = window.speechSynthesis.getVoices();
+        msg.voice = voices[voiceNum];
+        WORLD.currentVoiceNum = voiceNum;
+    }
+
+    msg.text = text;
+
+    window.speechSynthesis.speak(msg);
+};
+
+/**
+ * call the given function, when a touch&move (drag) happened
+ * @param {function} func - called with current x and y coordinates
+ */
+WORLD.onTouchMove = function(func) {
+    WORLD.svg.call(
+        d3.drag()
+            .on('drag', dragged )
+    );
+
+    function dragged() {
+        func(d3.event.x, d3.event.y);
+    }
+};
+
+/**
+ * call the given function when the given body collides with anything
+ * @param body - body to watch for collision
+ * @param func - function to call with parameter 'pair' which has both colliding bodies:  'pair.bodyA' and 'pair.bodyB'
+ */
+WORLD.onCollisionStart = function(body, func) {
+    Matter.Events.on(WORLD.engine, 'collisionStart', function(event) {
+        var pairs = event.pairs;
+
+        for (var i = 0; i < pairs.length; i++) {
+            var pair = pairs[i];
+            if(pair.bodyA.id == body.id || pair.bodyB.id == body.id) {
+                func(pair);
+            }
+        }
+    });
+};

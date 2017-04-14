@@ -1,2 +1,4 @@
-* https://cdn.rawgit.com/owidder/hackerschoolPg/voices5/voices.html
-* https://cdn.rawgit.com/owidder/hackerschoolPg/voices5/hackerRun.html
+Voices
+* https://cdn.rawgit.com/iterawidder/hackerschoolPg/v3/voices.html
+
+Docs
