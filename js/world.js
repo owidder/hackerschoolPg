@@ -6,6 +6,26 @@
  * @constructor
  */
 var World = function() {
+    var thisWorld = this;
+
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
+    var svg = d3.select("#field")
+        .attr("width", width)
+        .attr("height", height);
+    var gNobodies = svg.append("g");
+    var gStatic = svg.append("g");
+    var gDynamic = svg.append("g");
+    var gText = svg.append("g");
+
+    var engine = Matter.Engine.create();
+
+    Matter.Engine.run(engine);
+    var d3Renderer = new MatterD3Renderer(engine, gStatic, gDynamic);
+    Matter.Events.on(engine, "afterUpdate", function () {
+        d3Renderer.renderD3();
+    });
 
     /**
      * Create a circle shaped body
@@ -26,18 +46,22 @@ var World = function() {
         var circle = Matter.Bodies.circle(cx, cy, r, {
             isStatic: isStatic, color: color
         });
-        WORLD.addRemovePromise(circle);
-        Matter.World.add(WORLD.engine.world, [circle]);
+        addRemovePromise(circle);
+        Matter.World.add(engine.world, [circle]);
 
         return circle;
     };
+
+    function _removeBody() {
+        Matter.World.remove(engine.world, body);
+    }
 
     /**
      * remove the body from the world
      * @param {Body} body - body to remove
      */
     this.removeBody = function(body) {
-        WORLD.removeBody(body);
+        _removeBody(body);
     };
 
     /**
@@ -52,7 +76,20 @@ var World = function() {
      * @returns the created body
      */
     this.rectangleBody = function(cx, cy, width, height, isStatic, color) {
-        WORLD.rectangleBody(cx, cy, width, height, isStatic, color);
+        if(isStatic == null) {
+            isStatic = false;
+        }
+        if(color == null) {
+            color = "black";
+        }
+
+        var rectangle = Matter.Bodies.rectangle(cx, cy, width, height, {
+            isStatic: isStatic, color: color
+        });
+        addRemovePromise(rectangle);
+        Matter.World.add(engine.world, [rectangle]);
+
+        return rectangle;
     };
 
     /**
@@ -65,12 +102,19 @@ var World = function() {
      * @returns Promise that resolves, when the body has arrived
      */
     this.moveBody = function(body, duration, toX, toY) {
-        WORLD.moveBody(body, duration, toX, toY);
+        var finishedPromise = new SimplePromise();
+        var currentX = body.position.x;
+        var currentY = body.position.y;
+        var _toX = (toX == null ? currentX : toX);
+        var _toY = (toY == null ? currentY : toY);
+
+        moveRecursive(body, duration, _toX, _toY, finishedPromise);
+        return finishedPromise.promise;
     };
 
-    this.addRemovePromise = function(body) {
+    function addRemovePromise(body) {
         body.removePromise = new SimplePromise();
-    };
+    }
 
     this.removeBodyWithId = function(bodyId) {
         var body = Matter.Composite.get(this.engine.world, bodyId, "body");
@@ -83,16 +127,16 @@ var World = function() {
     };
 
     this.makeBodyStatic = function(bodyId) {
-        var body = WORLD.getBodyFromId(bodyId);
+        var body = this.getBodyFromId(bodyId);
         Matter.Body.setStatic(body, true);
     };
 
-    WORLD.getBodyFromId = function(bodyId) {
-        var body = Matter.Composite.get(WORLD.engine.world, bodyId, "body");
+    this.getBodyFromId = function(bodyId) {
+        var body = Matter.Composite.get(engine.world, bodyId, "body");
         return body;
     };
 
-    WORLD.moveRecursive = function (body, duration, toX, toY, promise) {
+    function moveRecursive(body, duration, toX, toY, promise) {
         var currentX = body.position.x;
         var currentY = body.position.y;
         var diffX = toX - currentX;
@@ -105,32 +149,43 @@ var World = function() {
         else {
             Matter.Body.setPosition(body, {x: currentX + directionX, y: currentY + directionY});
             setTimeout(function () {
-                WORLD.moveRecursive(body, duration, toX, toY, promise);
+                moveRecursive(body, duration, toX, toY, promise);
             }, duration);
         }
-    };
+    }
 
-    WORLD.gc = function() {
-        function isDynamic(body) {
-            return !body.isStatic;
-        }
-        var dynamicBodies = Matter.Composite.allBodies(WORLD.engine.world).filter(isDynamic);
-        dynamicBodies.forEach(function(body) {
-            if(body.position.y > WORLD.height) {
-                body.removePromise.resolve();
-                WORLD.removeBody(body);
+    function startGc() {
+        function gc() {
+            function isDynamic(body) {
+                return !body.isStatic;
             }
-        })
+            var dynamicBodies = Matter.Composite.allBodies(engine.world).filter(isDynamic);
+            dynamicBodies.forEach(function(body) {
+                if(body.position.y > height) {
+                    body.removePromise.resolve();
+                    _removeBody(body);
+                }
+            })
+        }
+
+        setInterval(gc, 1000);
     };
 
-    WORLD.startGc = function () {
-        setInterval(WORLD.gc, 1000);
-    };    /**
+    /**
      * let the background flash
      * @param {string} color - color of the flash
      */
     this.backgroundColorFlash = function(color) {
-        WORLD.backgroundColorFlash(color);
+        d3.selectAll("svg")
+            .transition()
+            .duration(300)
+            .style("background-color", color)
+            .on("end", function () {
+                d3.selectAll("svg")
+                    .transition()
+                    .duration(1000)
+                    .style("background-color", "white");
+            });
     };
 
     /**
@@ -143,7 +198,50 @@ var World = function() {
      * @param {string} className - CSS class (default: '')
      */
     this.showSplash = function(message, fontSize, x, y, className) {
-        WORLD.showSplash(message, fontSize, x, y, className);
+        if(className == null) {
+            className = "";
+        }
+        if(x == null) {
+            x = WORLD.width/2;
+        }
+        if(y == null) {
+            y = WORLD.height/2;
+        }
+        if(fontSize == null) {
+            fontSize = "5em";
+        }
+        if(!isNaN(fontSize)) {
+            fontSize += "em";
+        }
+
+        var id = WORLD.uid();
+
+        this.showText(id, message, x, y, fontSize, className);
+        this.removeText(id);
+    };
+
+    this.showText = function(id, text, x, y, fontSize, className) {
+        gText.selectAll("text._" + id)
+            .data([id])
+            .enter()
+            .append("text")
+            .attr("class", "message _" + id + " " + className);
+
+        gText.selectAll("text._" + id)
+            .attr("x", x)
+            .attr("y", y)
+            .style("font-size", fontSize + "em")
+            .text(text);
+    };
+
+    this.removeText = function(id) {
+        gText.selectAll("text._" + id)
+            .data([])
+            .exit()
+            .transition()
+            .duration(1000)
+            .style("opacity", 0)
+            .remove();
     };
 
     /**
@@ -157,10 +255,19 @@ var World = function() {
      * @constructor
      */
     this.Display = function(text, x, y, fontSize, className) {
-        var that = this;
+        var thisDisplay = this;
         function show() {
-            WORLD.showText(that.id, that.text, that.x, that.y, that.fontSize, that.className);
+            thisWorld.showText(that.id, that.text, that.x, that.y, that.fontSize, that.className);
         }
+
+        function uid() {
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+            }
+            return s4() + s4();
+        };
 
         /**
          * change the shown text
@@ -216,10 +323,10 @@ var World = function() {
          * remove the currently shown text
          */
         this.remove = function () {
-            WORLD.removeText(this.id);
+            thisWorld.removeText(this.id);
         };
 
-        this.id = WORLD.uid();
+        this.id = uid();
         this.text = text;
         this.x = x;
         this.y = y;
@@ -236,7 +343,21 @@ var World = function() {
      * {@link https://cdn.rawgit.com/iterawidder/hackerschoolPg/v3/voices.html}
      */
     this.speek = function (text, voiceNum) {
-        WORLD.speek(text, voiceNum);
+        var msg = this.currentMessage;
+        if(msg == null) {
+            msg = new SpeechSynthesisUtterance(text);
+            this.currentMessage = msg;
+        }
+
+        if(voiceNum != this.currentVoiceNum) {
+            var voices = window.speechSynthesis.getVoices();
+            msg.voice = voices[voiceNum];
+            this.currentVoiceNum = voiceNum;
+        }
+
+        msg.text = text;
+
+        window.speechSynthesis.speak(msg);
     };
 
     /**
@@ -244,7 +365,12 @@ var World = function() {
      * @param {Function} func - called with current x and y coordinates
      */
     this.onTouchMove = function(func) {
-        WORLD.onTouchMove(func);
+        svg.call(
+            d3.drag()
+                .on('drag', function () {
+                    func(d3.event.x, d3.event.y);
+                })
+        );
     };
 
     /**
@@ -253,10 +379,81 @@ var World = function() {
      * @param {Function} func - function to call with parameter 'pair' which has both colliding bodies:  'pair.bodyA' and 'pair.bodyB'
      */
     this.onCollisionStart = function(body, func) {
-        WORLD.onCollisionStart(body, func);
+        Matter.Events.on(engine, 'collisionStart', function(event) {
+            var pairs = event.pairs;
+
+            for (var i = 0; i < pairs.length; i++) {
+                var pair = pairs[i];
+                if(pair.bodyA.id == body.id || pair.bodyB.id == body.id) {
+                    func(pair);
+                }
+            }
+        });
     };
 
-    WORLD.init();
+    this.onClick = function(func) {
+        $(document).click(function (event) {
+            func(event.clientX, event.clientY, event);
+        });
+    };
+
+    this.initTouch = function() {
+        if(!this.touchInitialized) {
+            TouchEmulator();
+            this.touchInitialized == true;
+        }
+    };
+
+    this.onTouchStart = function(func) {
+        this.initTouch();
+        document.body.addEventListener('touchstart', function(event) {
+            func(event.touches[0].clientX, event.touches[0].clientY, event);
+        });
+    };
+
+    this.onTouchEnd = function(func) {
+        this.initTouch();
+        document.body.addEventListener('touchend', function (event) {
+            func(event.changedTouches[0].clientX, event.changedTouches[0].clientY, event);
+        })
+    };
+
+    this.onTouch = function(func) {
+        this.initTouch();
+        document.body.addEventListener('touchend', function (event) {
+            if(this.touchMove) {
+                this.touchMove = false;
+            }
+            else {
+                func(event.changedTouches[0].clientX, event.changedTouches[0].clientY, event);
+            }
+        })
+    };
+
+    this.circle = function(cx, cy, r, color, className) {
+        if(className == null) {
+            className = "";
+        }
+        gNobodies.append("circle")
+            .attr("class", className)
+            .attr("cx", cx)
+            .attr("cy", cy)
+            .attr("r", r)
+            .attr("style", "fill: " + color);
+    };
+
+    this.rectangle = function(x, y, width, height, color, className) {
+        if(className == null) {
+            className = "";
+        }
+        gNobodies.append("rect")
+            .attr("class", className)
+            .attr("x", x)
+            .attr("y", y)
+            .attr("width", width)
+            .attr("height", height)
+            .attr("style", "fill: " + color);
+    };
 };
 
 
