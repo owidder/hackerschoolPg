@@ -5,7 +5,7 @@
 /* global MatterD3Renderer */
 /* global d3 */
 
-(function() {
+WORLD.init = function() {
 
     var width = window.innerWidth;
     var height = window.innerHeight;
@@ -36,5 +36,5 @@
     WORLD.height = height;
 
     WORLD.startGc();
-})();
+};
 
