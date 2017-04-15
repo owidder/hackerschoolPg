@@ -15,13 +15,6 @@
     <script src="./js/private/SimplePromise.js"></script>
     <script src="./js/private/matterD3Renderer.js"></script>
 
-    <script src="./js/private/boot.js"></script>
-    <script src="./js/private/util.js"></script>
-    <script src="./js/private/effects.js"></script>
-    <script src="./js/private/body.js"></script>
-    <script src="./js/private/nobody.js"></script>
-    <script src="./js/private/events.js"></script>
-
     <script src="./js/world.js"></script>
 
     <meta charset="UTF-8">
@@ -39,39 +32,39 @@
 
 <svg id="field"></svg>
 
-<script src="./js/private/init.js"></script>
 <script>
 
-/* global WORLD */
 /* global _ */
-git s
-    var display = new WORLD.Display("0", 20, 20, 1);
 
-    WORLD.onTouchMove(function(x, y) {
-        var rect = WORLD.rectangleBody(x, y, 5, 5, true);
+    var world = new World();
+    var display = new world.createDisplay("0", 20, 20, 1);
+
+    world.onTouchMove(function(x, y) {
+        var rect = world.rectangleBody(x, y, 5, 5, true);
         setTimeout(function () {
-            WORLD.removeBody(rect);
+            world.removeBody(rect);
         }, 10000);
     });
 
     function createRandomRect(color) {
-        var randomX = _.random(0, WORLD.width);
-        var randomY = _.random(WORLD.height/2, WORLD.height);
+        var randomX = _.random(0, world.getWidth());
+        var randomY = _.random(world.getHeight()/2, world.getHeight());
         var randomLength = _.random(30, 50);
 
-        var rect = WORLD.rectangleBody(randomX, randomY, randomLength, 10, true, color);
+        var rect = world.rectangleBody(randomX, randomY, randomLength, 10, true, color);
 
         return rect;
     }
 
-    var ctr;
-    for(ctr = 0; ctr < 5; ctr++) {
-        var redRect = createRandomRect("red");
+    var ctr, redRect, greenRect;
 
-        WORLD.onCollisionStart(redRect, function(pair) {
-            WORLD.backgroundColorFlash("red");
-            WORLD.showSplash("Ouuuch!!!", 1.5, pair.bodyA.position.x, pair.bodyA.position.y);
-            WORLD.speek("Ouch", 20);
+    for(ctr = 0; ctr < 5; ctr++) {
+        redRect = createRandomRect("red");
+
+        world.onCollisionStart(redRect, function(pair) {
+            world.backgroundColorFlash("red");
+            world.showSplash("Ouuuch!!!", 1.5, pair.bodyA.position.x, pair.bodyA.position.y);
+            world.speek("Ouch", 20);
             display.sub(10);
         });
 
@@ -79,25 +72,31 @@ git s
     }
 
     for(ctr = 0; ctr < 5; ctr++) {
-        var greenRect = createRandomRect("green");
+        greenRect = createRandomRect("green");
 
-        WORLD.onCollisionStart(greenRect, function(pair) {
-            WORLD.backgroundColorFlash("green");
-            WORLD.showSplash("Yeaaaa!!!", 1.5, pair.bodyA.position.x, pair.bodyA.position.y);
-            WORLD.speek("Yeah", 10);
+        world.onCollisionStart(greenRect, function(pair) {
+            world.backgroundColorFlash("green");
+            world.showSplash("Yeaaaa!!!", 1.5, pair.bodyA.position.x, pair.bodyA.position.y);
+            world.speek("Yeah", 10);
             display.add(10);
         });
 
         endlessMove(greenRect);
     }
-    
+
     function endlessMove(rect) {
         function moveToLeft() {
-            WORLD.moveBody(rect, _.random(100, 200), 0).then(moveToRight);
+            var durationPerStep = _.random(100, 200);
+            world.moveBody(rect, durationPerStep, 0).then(function () {
+                moveToRight();
+            });
         }
     
         function moveToRight() {
-            WORLD.moveBody(rect, _.random(100, 200), WORLD.width).then(moveToLeft);
+            var durationPerStep = _.random(100, 200);
+            world.moveBody(rect, durationPerStep, world.getWidth()).then(function () {
+                moveToLeft();
+            });
         }
      
         if(_.random(0, 1) == 0) {
@@ -109,8 +108,8 @@ git s
     }
 
     setInterval(function () {
-        var randomX = _.random(0, WORLD.width);
-        WORLD.circleBody(randomX, -100, 10, false, "blue");
+        var randomX = _.random(0, world.getWidth());
+        world.circleBody(randomX, -100, 10, false, "blue");
     }, 5000);
 
 </script>

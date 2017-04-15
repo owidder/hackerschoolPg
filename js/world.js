@@ -1,17 +1,27 @@
 'use strict';
 
-/* global WORLD */
+/* global d3 */
+/* global Math */
+/* global SimplePromise */
+/* global Matter */
+/* global $ */
 
 /**
+ *
+ * @param {string} svgId - id of the svg element used for the drawing (default: 'field')
  * @constructor
  */
-var World = function() {
+var World = function(svgId) {
     var thisWorld = this;
+
+    if(svgId == null) {
+        svgId = "field";
+    }
 
     var width = window.innerWidth;
     var height = window.innerHeight;
 
-    var svg = d3.select("#field")
+    var svg = d3.select("#" + svgId)
         .attr("width", width)
         .attr("height", height);
     var gNobodies = svg.append("g");
@@ -22,6 +32,7 @@ var World = function() {
     var engine = Matter.Engine.create();
 
     Matter.Engine.run(engine);
+
     var d3Renderer = new MatterD3Renderer(engine, gStatic, gDynamic);
     Matter.Events.on(engine, "afterUpdate", function () {
         d3Renderer.renderD3();
@@ -52,16 +63,12 @@ var World = function() {
         return circle;
     };
 
-    function _removeBody() {
-        Matter.World.remove(engine.world, body);
-    }
-
     /**
      * remove the body from the world
      * @param {Body} body - body to remove
      */
     this.removeBody = function(body) {
-        _removeBody(body);
+        Matter.World.remove(engine.world, body);
     };
 
     /**
@@ -117,7 +124,7 @@ var World = function() {
     }
 
     this.removeBodyWithId = function(bodyId) {
-        var body = Matter.Composite.get(this.engine.world, bodyId, "body");
+        var body = Matter.Composite.get(engine.world, bodyId, "body");
         this.removeBody(body);
     };
 
@@ -163,13 +170,13 @@ var World = function() {
             dynamicBodies.forEach(function(body) {
                 if(body.position.y > height) {
                     body.removePromise.resolve();
-                    _removeBody(body);
+                    thisWorld.removeBody(body);
                 }
             })
         }
 
         setInterval(gc, 1000);
-    };
+    }
 
     /**
      * let the background flash
@@ -192,9 +199,9 @@ var World = function() {
      * show a splash message
      *
      * @param {string} message - text of the message
-     * @param {string} fontSize - size of the text in 'em'
-     * @param {number} x - x coordinate of the text (default: WORLD.width/2)
-     * @param {number} y - y coordinate of the text (default: WORLD.height/2)
+     * @param {string} fontSize - size of the text (default: '5em')
+     * @param {number} x - x coordinate of the text (default: width/2)
+     * @param {number} y - y coordinate of the text (default: height/2)
      * @param {string} className - CSS class (default: '')
      */
     this.showSplash = function(message, fontSize, x, y, className) {
@@ -202,10 +209,10 @@ var World = function() {
             className = "";
         }
         if(x == null) {
-            x = WORLD.width/2;
+            x = width/2;
         }
         if(y == null) {
-            y = WORLD.height/2;
+            y = height/2;
         }
         if(fontSize == null) {
             fontSize = "5em";
@@ -214,7 +221,7 @@ var World = function() {
             fontSize += "em";
         }
 
-        var id = WORLD.uid();
+        var id = uid();
 
         this.showText(id, message, x, y, fontSize, className);
         this.removeText(id);
@@ -244,34 +251,30 @@ var World = function() {
             .remove();
     };
 
+    function uid() {
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1);
+        }
+        return s4() + s4();
+    }
+
     /**
-     * create a display
+     * Display class
      *
-     * @param {string} text - initial text to show
-     * @param {number} x - x coord
-     * @param {number} y - y coord
-     * @param {number} fontSize - size of the text (in 'em')
-     * @param {string} className - CSS class (default: '')
      * @constructor
      */
-    this.Display = function(text, x, y, fontSize, className) {
+    var Display = function(text, x, y, fontSize, className) {
         var thisDisplay = this;
-        function show() {
-            thisWorld.showText(that.id, that.text, that.x, that.y, that.fontSize, that.className);
-        }
 
-        function uid() {
-            function s4() {
-                return Math.floor((1 + Math.random()) * 0x10000)
-                    .toString(16)
-                    .substring(1);
-            }
-            return s4() + s4();
-        };
+        function show() {
+            thisWorld.showText(thisDisplay.id, thisDisplay.text, thisDisplay.x, thisDisplay.y, thisDisplay.fontSize, thisDisplay.className);
+        }
 
         /**
          * change the shown text
-         * @param text - new text to show
+         * @param {string} text - new text to show
          */
         this.changeText = function (text) {
             this.text = text;
@@ -334,6 +337,19 @@ var World = function() {
         this.className = className != null ? className : "";
 
         show();
+    };
+
+    /**
+     * create a new Display
+     *
+     * @param {string} text - initial text to show
+     * @param {number} x - x coord
+     * @param {number} y - y coord
+     * @param {number} fontSize - size of the text (in 'em')
+     * @param {string} className - CSS class (default: '')
+     */
+    this.createDisplay = function(text, x, y, fontSize, className) {
+        return new Display(text, x, y, fontSize, className);
     };
 
     /**
@@ -454,6 +470,14 @@ var World = function() {
             .attr("height", height)
             .attr("style", "fill: " + color);
     };
+
+    this.getWidth = function () {
+        return width;
+    };
+
+    this.getHeight = function () {
+        return height;
+    };
+
+    startGc();
 };
-
-
