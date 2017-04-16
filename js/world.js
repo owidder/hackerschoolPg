@@ -100,6 +100,16 @@ var World = function(svgId) {
     };
 
     /**
+     * Rotatet a body by an angle
+     *
+     * @param {Body} body - body to rotate
+     * @param {number} angle -
+     */
+    this.rotateBody = function (body, angle) {
+        Matter.Body.rotate(body, angle);
+    };
+
+    /**
      * move a body (stepwise) to a x/y-coordinate
      *
      * @param {Body} body - body to move
