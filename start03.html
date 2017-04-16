@@ -40,7 +40,12 @@
     var world = new World();
     
     setInterval(function() {
-        world.circleBody(_.random(0, world.getWidth()), 0, 5, false, "red");
+        if(_.random(0,1) == 1) {
+            world.circleBody(_.random(0, world.getWidth()), 0, 5, false, "red");
+        }
+        else {
+            world.rectangleBody(_.random(0, world.getWidth()), 0, 10, 10, false, "orange");
+        }
     }, 1000);
 
     function createPropeller(x, y, width) {
