@@ -117,11 +117,22 @@ var World = function(svgId) {
      */
     this.rotateBodyByRadiant = function (body, angle) {
         Matter.Body.rotate(body, angle);
-    }
-    
+    };
+
+    /**
+     * scale the body
+     *
+     * @param {Body} body - body to scale
+     * @param {number} scaleX - scale factor in x dimension
+     * @param {number} scaleY - scale factor in y dimension
+     */
     this.scaleBody = function(body, scaleX, scaleY) {
         Matter.Body.scale(body, scaleX, scaleY);
-    }
+    };
+
+    this.setInertiaForBody = function(body, inertia) {
+        Matter.Body.setInertia(body, inertia);
+    };
 
     /**
      * move a body (stepwise) to a x/y-coordinate

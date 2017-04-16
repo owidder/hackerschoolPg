@@ -57,32 +57,8 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
         return createClassNameFromBody(d, "dynamic");
     }
 
-    function renderD3Static() {
-        var staticBodies = Matter.Composite.allBodies(engine.world).filter(isStatic);
-
-        var data = gStatic.selectAll("path.static")
-            .data(staticBodies, function (d) {
-                return d.id;
-            });
-
-        data.enter()
-            .append("path")
-            .attr("id", function (d) {
-                return "id-" + d.id;
-            })
-            .attr("class", createClassNameFromBodyForStatic)
-            .attr("style", function (d) {
-                return "fill: " + (d.color != null ? d.color : "black")
-            })
-            .attr("d", createPathFromBody);
-
-        data.exit().remove();
-    }
-
     function renderD3Bodies() {
-        var dynamicOthers = Matter.Composite.allBodies(engine.world).filter(function(body) {
-            return !isCircle(body);
-        });
+        var dynamicOthers = Matter.Composite.allBodies(engine.world);
 
         var dataOthers = gDynamic.selectAll("path.dynamic")
             .data(dynamicOthers, function(d) {
@@ -101,36 +77,6 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
             .attr("d", createPathFromBody);
 
         dataOthers.exit().remove();
-
-        var dynamicCircles = Matter.Composite.allBodies(engine.world).filter(function(body) {
-            return isCircle(body);
-        });
-
-        var dataCircles = gDynamic.selectAll("circle.dynamic")
-            .data(dynamicCircles, function (d) {
-                return d.id;
-            });
-
-        dataCircles.enter()
-            .append("circle")
-            .attr("class", createClassNameFromBodyForDynamic)
-            .attr("r", function(d) {
-                return d.circleRadius;
-            })
-            .attr("style", function (d) {
-                return "fill: " + (d.color != null ? d.color : "black")
-            });
-
-        gDynamic.selectAll("circle.dynamic")
-            .attr("cx", function(d) {
-                return d.position.x;
-            })
-            .attr("cy", function(d) {
-                return d.position.y;
-            });
-
-        dataCircles.exit().remove();
-
     }
 
     function renderD3DynamicTitles() {
