@@ -100,14 +100,24 @@ var World = function(svgId) {
     };
 
     /**
-     * Rotatet a body by an angle
+     * Rotate a body by an angle in degree (0 - 360)
      *
      * @param {Body} body - body to rotate
-     * @param {number} angle -
+     * @param {number} angle - angle in degree (0 - 360)
      */
-    this.rotateBody = function (body, angle) {
-        Matter.Body.rotate(body, angle);
+    this.rotateBodyByDegree = function (body, angle) {
+        Matter.Body.rotate(body, angle / 180 * Math.PI);
     };
+    
+    /**
+     * Rotate a body by an angle in radiant (0 - 2 * Math.PI)
+     *
+     * @param {Body} body - body to rotate
+     * @param {number} angle - angle in radiant (0 - 2 * Math.PI)
+     */
+    this.rotateBodyByRadiant = function (body, angle) {
+        Matter.Body.rotate(body, angle);
+    }
 
     /**
      * move a body (stepwise) to a x/y-coordinate
