@@ -47,9 +47,9 @@
         else {
             body = world.rectangleBody(_.random(0, world.getWidth()), 0, 10, 10, false, "orange");
         }
-        setTimeout(function() {
-            world.scaleBody(body, 2, 2);
-        },2000);
+        setInterval(function() {
+            world.scaleBody(body, 1.01, 1.01);
+        },200);
     }, 1000);
 
     function createPropeller(x, y, width) {
