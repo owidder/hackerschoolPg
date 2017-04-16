@@ -40,13 +40,22 @@
     var world = new World();
     
     setInterval(function() {
-        world.circleBody(world.getWidth()/2, world.getHeight()/4, 20, false, "red");
-    }, 100)
-    
-    var rectangle = world.rectangleBody(world.getWidth()/2, world.getHeight()/2, 500, 30, true, "green");
-    setInterval(function() {
-        world.rotateBodyByDegree(rectangle, 1);
-    }, 5);
+        world.circleBody(_.random(0, world.getWidth()), 0, 20, false, "red");
+    }, 300);
+
+    function createPropeller(x, y) {
+        var rectangle = world.rectangleBody(x, y, 500, 30, true, "green");
+        setInterval(function() {
+            world.rotateBodyByDegree(rectangle, 1);
+        }, 5);
+    }
+
+    createPropeller(0, 0);
+    createPropeller(world.getWidth()/3, world.getHeight()/3);
+    createPropeller(world.getWidth()/2, world.getHeight()/2);
+    createPropeller(world.getWidth()/3*2, world.getHeight()/3*2);
+    createPropeller(world.getWidth(), world.getHeight());
+
 </script>
 
 </body>
