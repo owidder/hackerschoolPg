@@ -163,9 +163,6 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
     }
 
     this.constructor.prototype.renderD3 = function() {
-        // if(gStatic != null) {
-        //     renderD3Static();
-        // }
         if(gDynamic != null) {
             renderD3Bodies();
             renderD3DynamicTitles();

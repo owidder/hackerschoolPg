@@ -118,6 +118,10 @@ var World = function(svgId) {
     this.rotateBodyByRadiant = function (body, angle) {
         Matter.Body.rotate(body, angle);
     }
+    
+    this.scaleBody = function(body, scaleX, scaleY) {
+        Matter.Body.scale(body, scaleX, scaleY);
+    }
 
     /**
      * move a body (stepwise) to a x/y-coordinate
