@@ -54,6 +54,9 @@
         var circle = world.circleBody(world.getWidth() * .2, 0, 10, false, "blue");
 
         world.onBodyRemoved(circle, function () {
+            world.backgroundColorFlash("red");
+            world.showSplash("Ouch!!!", 1.5, world.getWidth()/2, world.getHeight()/2);
+            world.speek("Yeah", 10);
             display.sub(10);
             nextCircle();
         });
