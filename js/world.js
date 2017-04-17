@@ -517,6 +517,10 @@ var World = function(svgId) {
         })
     };
 
+    /**
+     * call a function when the screen is touched anywhere
+     * @param {Function} func - function to call (gets the x/y coordinates of the touch as parameters 'x' and 'y')
+     */
     this.onTouch = function(func) {
         this.initTouch();
         document.body.addEventListener('touchend', function (event) {
