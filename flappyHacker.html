@@ -18,7 +18,7 @@
     <script src="./js/world.js"></script>
 
     <meta charset="UTF-8">
-    <title>Hacker Run</title>
+    <title>Flappy Hacker</title>
 
     <style>
         text {
@@ -43,9 +43,12 @@
 
     var alive = true;
 
-    var circle = world.circleBody(world.getWidth()/2, world.getHeight()/2, 10, false, "blue");
+    var circle = world.circleBody(world.getWidth()/2, world.getHeight()/2, 5, false, "blue");
+    circle.img = "img/bird1Right.png";
+    circle.imgHeight = 50;
+    circle.imgWidth = 50;
     world.onClick(function () {
-        world.applyYForceToBody(circle, -.005);
+        world.applyYForceToBody(circle, -.001);
     });
 
     function loose() {

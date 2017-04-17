@@ -57,15 +57,57 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
         return createClassNameFromBody(d, "dynamic");
     }
 
-    function renderD3Bodies() {
-        var dynamicOthers = Matter.Composite.allBodies(engine.world);
+    function renderD3Img() {
+        var dynamicImg= Matter.Composite.allBodies(engine.world).filter(function (b) {
+            return b.img != null;
+        });
 
-        var dataOthers = gDynamic.selectAll("path.dynamic")
-            .data(dynamicOthers, function(d) {
+        var data = gDynamic.selectAll("image.dynamic")
+            .data(dynamicImg, function (d) {
                 return d.id;
             });
 
-        dataOthers.enter()
+        data.enter()
+            .append("svg:image")
+            .attr("class", "dynamic")
+            .attr("width", function (d) {
+                if(d.imgWidth != null) {
+                    return d.imgWidth;
+                }
+                return d.bounds.max.x - d.bounds.min.x;
+            })
+            .attr("height", function (d) {
+                if(d.imgHeight != null) {
+                    return d.imgHeight;
+                }
+                return d.bounds.max.y - d.bounds.min.y;
+            })
+            .attr("xlink:href", function (d) {
+                return d.img;
+            });
+
+        gDynamic.selectAll("image.dynamic")
+            .attr("x", function (d) {
+                return (d.bounds.max.x + d.bounds.min.x) / 2;
+            })
+            .attr("y", function (d) {
+                return (d.bounds.max.y + d.bounds.min.y) / 2;
+            });
+
+        data.exit().remove();
+    }
+
+    function renderD3Bodies() {
+        var dynamic = Matter.Composite.allBodies(engine.world).filter(function (b) {
+            return b.img == null;
+        });
+
+        var data = gDynamic.selectAll("path.dynamic")
+            .data(dynamic, function(d) {
+                return d.id;
+            });
+
+        data.enter()
             .append("path")
             .attr("class", createClassNameFromBodyForDynamic)
             .attr("style", function (d) {
@@ -76,7 +118,7 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
         gDynamic.selectAll("path.dynamic")
             .attr("d", createPathFromBody);
 
-        dataOthers.exit().remove();
+        data.exit().remove();
     }
 
     function renderD3DynamicTitles() {
@@ -111,6 +153,7 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
     this.constructor.prototype.renderD3 = function() {
         if(gDynamic != null) {
             renderD3Bodies();
+            renderD3Img();
             renderD3DynamicTitles();
         }
     }
