@@ -192,6 +192,160 @@
 
     
 
+    <h4 class="name" id="applyXForceToBody"><span class="type-signature"></span>applyXForceToBody<span class="signature">(body, force)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    apply a force to a body in x direction
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>body</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Body</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">body to apply force on</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>force</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">force to apply (force < 0 -> to the left, forcce > 0 -> to the right)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="world.js.html">world.js</a>, <a href="world.js.html#line149">line 149</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id="backgroundColorFlash"><span class="type-signature"></span>backgroundColorFlash<span class="signature">(color)</span><span class="type-signature"></span></h4>
 
     
@@ -292,7 +446,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="world.js.html">world.js</a>, <a href="world.js.html#line185">line 185</a>
+        <a href="world.js.html">world.js</a>, <a href="world.js.html#line244">line 244</a>
     </li></ul></dd>
     
 
@@ -748,7 +902,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="world.js.html">world.js</a>, <a href="world.js.html#line351">line 351</a>
+        <a href="world.js.html">world.js</a>, <a href="world.js.html#line410">line 410</a>
     </li></ul></dd>
     
 
@@ -948,7 +1102,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="world.js.html">world.js</a>, <a href="world.js.html#line111">line 111</a>
+        <a href="world.js.html">world.js</a>, <a href="world.js.html#line166">line 166</a>
     </li></ul></dd>
     
 
@@ -989,6 +1143,314 @@
 
     
 
+    <h4 class="name" id="on2BodiesCollisionStart"><span class="type-signature"></span>on2BodiesCollisionStart<span class="signature">(body1, body2, func)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    call a function when 2 dedicated bodies collide
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>body1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Body</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">first body</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>body2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Body</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">second body</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>func</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">function to call with parameter 'pair' which has both colliding bodies:  'pair.bodyA' and 'pair.bodyB'</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="world.js.html">world.js</a>, <a href="world.js.html#line475">line 475</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="onClick"><span class="type-signature"></span>onClick<span class="signature">(func)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    call the function when the mouse is clicked
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>func</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">function to call (gets x and y as number parameter)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="world.js.html">world.js</a>, <a href="world.js.html#line493">line 493</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id="onCollisionStart"><span class="type-signature"></span>onCollisionStart<span class="signature">(body, func)</span><span class="type-signature"></span></h4>
 
     
@@ -996,7 +1458,7 @@
 
 
 <div class="description">
-    call the given function when the given body collides with anything
+    call a function when the given body collides with anything
 </div>
 
 
@@ -1112,7 +1574,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="world.js.html">world.js</a>, <a href="world.js.html#line397">line 397</a>
+        <a href="world.js.html">world.js</a>, <a href="world.js.html#line456">line 456</a>
     </li></ul></dd>
     
 
@@ -1243,7 +1705,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="world.js.html">world.js</a>, <a href="world.js.html#line383">line 383</a>
+        <a href="world.js.html">world.js</a>, <a href="world.js.html#line442">line 442</a>
     </li></ul></dd>
     
 
@@ -1661,6 +2123,491 @@
 
     
 
+    <h4 class="name" id="rotateBodyByDegree"><span class="type-signature"></span>rotateBodyByDegree<span class="signature">(body, angle)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Rotate a body by an angle in degree (0 - 360)
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>body</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Body</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">body to rotate</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>angle</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">angle in degree (0 - 360)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="world.js.html">world.js</a>, <a href="world.js.html#line108">line 108</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="rotateBodyByRadiant"><span class="type-signature"></span>rotateBodyByRadiant<span class="signature">(body, angle)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Rotate a body by an angle in radiant (0 - 2 * Math.PI)
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>body</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Body</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">body to rotate</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>angle</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">angle in radiant (0 - 2 * Math.PI)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="world.js.html">world.js</a>, <a href="world.js.html#line118">line 118</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="scaleBody"><span class="type-signature"></span>scaleBody<span class="signature">(body, scaleX, scaleY)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    scale the body
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>body</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Body</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">body to scale</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>scaleX</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">scale factor in x dimension</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>scaleY</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">scale factor in y dimension</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="world.js.html">world.js</a>, <a href="world.js.html#line129">line 129</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id="showSplash"><span class="type-signature"></span>showSplash<span class="signature">(message, fontSize, x, y, className)</span><span class="type-signature"></span></h4>
 
     
@@ -1853,7 +2800,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="world.js.html">world.js</a>, <a href="world.js.html#line207">line 207</a>
+        <a href="world.js.html">world.js</a>, <a href="world.js.html#line266">line 266</a>
     </li></ul></dd>
     
 
@@ -2008,7 +2955,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="world.js.html">world.js</a>, <a href="world.js.html#line361">line 361</a>
+        <a href="world.js.html">world.js</a>, <a href="world.js.html#line420">line 420</a>
     </li></ul></dd>
     
 
@@ -2056,7 +3003,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Apr 15 2017 15:21:04 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon Apr 17 2017 15:15:25 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
