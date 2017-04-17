@@ -67,31 +67,35 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
                 return d.id;
             });
 
+        function width(d) {
+            if(d.imgWidth != null) {
+                return d.imgWidth;
+            }
+            return d.bounds.max.x - d.bounds.min.x;
+        }
+
+        function height(d) {
+            if(d.imgHeight != null) {
+                return d.imgHeight;
+            }
+            return d.bounds.max.y - d.bounds.min.y;
+        }
+
         data.enter()
             .append("svg:image")
             .attr("class", "dynamic")
-            .attr("width", function (d) {
-                if(d.imgWidth != null) {
-                    return d.imgWidth;
-                }
-                return d.bounds.max.x - d.bounds.min.x;
-            })
-            .attr("height", function (d) {
-                if(d.imgHeight != null) {
-                    return d.imgHeight;
-                }
-                return d.bounds.max.y - d.bounds.min.y;
-            })
+            .attr("width", width)
+            .attr("height", height)
             .attr("xlink:href", function (d) {
                 return d.img;
             });
 
         gDynamic.selectAll("image.dynamic")
             .attr("x", function (d) {
-                return (d.bounds.max.x + d.bounds.min.x) / 2;
+                return (d.bounds.max.x + d.bounds.min.x) / 2 - width(d)/2;
             })
             .attr("y", function (d) {
-                return (d.bounds.max.y + d.bounds.min.y) / 2;
+                return (d.bounds.max.y + d.bounds.min.y) / 2 - height(d)/2;
             });
 
         data.exit().remove();
@@ -152,8 +156,8 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
 
     this.constructor.prototype.renderD3 = function() {
         if(gDynamic != null) {
-            renderD3Bodies();
             renderD3Img();
+            renderD3Bodies();
             renderD3DynamicTitles();
         }
     }
