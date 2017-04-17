@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" type="text/css" href="./css/materialize.css" media="screen,projection"/>
+    <link rel="stylesheet" type="text/css" href="./css/material-icons.css"/>
+
+    <script src="./lib/touch-emulator.js"></script>
+    <script src="./lib/matter.js"></script>
+    <script src="./lib/d3.v4.js"></script>
+    <script src="./lib/jquery-3.1.1.js"></script>
+    <script src="./lib/hammer-2.0.8.js"></script>
+    <script src="./lib/lodash.js"></script>
+
+    <script src="./js/private/SimplePromise.js"></script>
+    <script src="./js/private/matterD3Renderer.js"></script>
+
+    <script src="./js/world.js"></script>
+
+    <meta charset="UTF-8">
+    <title>Hacker Run</title>
+
+    <style>
+        text {
+            font-size: 5em;
+            color: black;
+        }
+    </style>
+
+</head>
+<body>
+
+<svg id="field"></svg>
+
+<script>
+
+    /* global _ */
+    /* global World */
+
+    var world = new World();
+
+    var rect = world.rectangleBody(world.getWidth() / 2, world.getHeight() * .8, world.getWidth(), 30, true, "grey");
+    var rect2 = world.rectangleBody(world.getWidth() * .75, world.getHeight() / 2, world.getWidth() / 10, 30, true, "green");
+
+    setInterval(function () {
+        world.rotateBodyByDegree(rect, .1);
+    }, 50);
+
+    var display = new world.createDisplay("0", 20, 20, 1);
+
+    var collisionStarted;
+    function nextCircle() {
+        collisionStarted = false;
+        var circle = world.circleBody(world.getWidth() * .2, 0, 10, false, "blue");
+
+        world.onBodyRemoved(circle, function () {
+            display.sub(10);
+            nextCircle();
+        });
+
+        world.onClick(function () {
+            world.applyXForceToBody(circle, .001);
+            world.applyYForceToBody(circle, -.005);
+        });
+
+        world.onCollisionStart(rect2, function (pair) {
+            if(!collisionStarted) {
+                collisionStarted = true;
+                world.backgroundColorFlash("lightgreen");
+                world.showSplash("Yeaaaa!!!", 1.5, pair.bodyA.position.x, pair.bodyA.position.y);
+                world.speek("Yeah", 10);
+                display.add(10);
+                world.removeBody(circle);
+                setTimeout(function () {
+                    nextCircle();
+                }, 2000)
+            }
+        });
+    }
+
+    nextCircle();
+
+</script>
+
+</body>
+</html>

@@ -178,6 +178,10 @@ var World = function(svgId) {
         body.removePromise = new SimplePromise();
     }
 
+    this.onBodyRemoved = function (body, func) {
+        body.removePromise.promise.then(func);
+    };
+
     this.removeBodyWithId = function(bodyId) {
         var body = Matter.Composite.get(engine.world, bodyId, "body");
         this.removeBody(body);
@@ -462,6 +466,11 @@ var World = function(svgId) {
         });
     };
 
+    /**
+     * call the function when the mouse is clicked
+     *
+     * @param {Function} func - function to call (gets x and y as number parameter)
+     */
     this.onClick = function(func) {
         $(document).click(function (event) {
             func(event.clientX, event.clientY, event);
