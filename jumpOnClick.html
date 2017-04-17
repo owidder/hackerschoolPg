@@ -63,7 +63,7 @@
             world.applyYForceToBody(circle, -.005);
         });
 
-        world.onCollisionStart(rect2, function (pair) {
+        world.on2BodiesCollisionStart(rect2, circle, function (pair) {
             if(!collisionStarted) {
                 collisionStarted = true;
                 world.backgroundColorFlash("lightgreen");

@@ -449,7 +449,7 @@ var World = function(svgId) {
     };
 
     /**
-     * call the given function when the given body collides with anything
+     * call a function when the given body collides with anything
      * @param {Body} body - body to watch for collision
      * @param {Function} func - function to call with parameter 'pair' which has both colliding bodies:  'pair.bodyA' and 'pair.bodyB'
      */
@@ -460,6 +460,25 @@ var World = function(svgId) {
             for (var i = 0; i < pairs.length; i++) {
                 var pair = pairs[i];
                 if(pair.bodyA.id == body.id || pair.bodyB.id == body.id) {
+                    func(pair);
+                }
+            }
+        });
+    };
+
+    /**
+     * call a function when 2 dedicated bodies collide
+     * @param {Body} body1 - first body
+     * @param {Body} body2 - second body
+     * @param {Function} func - function to call with parameter 'pair' which has both colliding bodies:  'pair.bodyA' and 'pair.bodyB'
+     */
+    this.on2BodiesCollisionStart = function(body1, body2, func) {
+        Matter.Events.on(engine, 'collisionStart', function(event) {
+            var pairs = event.pairs;
+
+            for (var i = 0; i < pairs.length; i++) {
+                var pair = pairs[i];
+                if((pair.bodyA.id == body1.id && pair.bodyB.id == body2.id) || (pair.bodyA.id == body1.id && pair.bodyB.id == body2.id)) {
                     func(pair);
                 }
             }
