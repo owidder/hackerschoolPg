@@ -141,8 +141,17 @@ var World = function(svgId) {
         Matter.Body.setInertia(body, inertia);
     };
 
+    /**
+     * apply a force to a body in x direction
+     * @param {Body} body - body to apply force on
+     * @param {number} force - force to apply (force < 0 -> to the left, forcce > 0 -> to the right)
+     */
     this.applyXForceToBody = function(body, force) {
         body.force.x += force;
+    };
+
+    this.applyYForceToBody = function(body, force) {
+        body.force.y += force;
     };
 
     /**
