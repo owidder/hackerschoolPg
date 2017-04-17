@@ -130,8 +130,19 @@ var World = function(svgId) {
         Matter.Body.scale(body, scaleX, scaleY);
     };
 
+    this.getCurrentCenterOfBody = function(body) {
+        var cx = (body.bounds.min.x + body.bounds.max.x) / 2;
+        var cy = (body.bounds.min.y + body.bounds.max.y) / 2;
+
+        return [cx, cy];
+    };
+
     this.setInertiaForBody = function(body, inertia) {
         Matter.Body.setInertia(body, inertia);
+    };
+
+    this.applyXForceToBody = function(body, force) {
+        body.force.x += force;
     };
 
     /**
