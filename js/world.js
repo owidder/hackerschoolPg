@@ -478,7 +478,7 @@ var World = function(svgId) {
 
             for (var i = 0; i < pairs.length; i++) {
                 var pair = pairs[i];
-                if((pair.bodyA.id == body1.id && pair.bodyB.id == body2.id) || (pair.bodyA.id == body1.id && pair.bodyB.id == body2.id)) {
+                if((pair.bodyA.id == body1.id && pair.bodyB.id == body2.id) || (pair.bodyA.id == body2.id && pair.bodyB.id == body1.id)) {
                     func(pair);
                 }
             }

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" type="text/css" href="./css/materialize.css" media="screen,projection"/>
+    <link rel="stylesheet" type="text/css" href="./css/material-icons.css"/>
+
+    <script src="./lib/touch-emulator.js"></script>
+    <script src="./lib/matter.js"></script>
+    <script src="./lib/d3.v4.js"></script>
+    <script src="./lib/jquery-3.1.1.js"></script>
+    <script src="./lib/hammer-2.0.8.js"></script>
+    <script src="./lib/lodash.js"></script>
+
+    <script src="./js/private/SimplePromise.js"></script>
+    <script src="./js/private/matterD3Renderer.js"></script>
+
+    <script src="./js/world.js"></script>
+
+    <meta charset="UTF-8">
+    <title>Hacker Run</title>
+
+    <style>
+        text {
+            font-size: 5em;
+            color: black;
+        }
+    </style>
+
+</head>
+<body>
+
+<svg id="field"></svg>
+
+<script>
+
+    /* global _ */
+    /* global World */
+
+    var world = new World();
+
+    var display = new world.createDisplay("0", 20, 40, 1);
+
+    var alive = true;
+
+    var circle = world.circleBody(world.getWidth()/2, world.getHeight()/2, 10, false, "blue");
+    world.onClick(function () {
+        world.applyYForceToBody(circle, -.005);
+    });
+
+    function loose() {
+        alive = false;
+        world.backgroundColorFlash("red");
+        world.showSplash("Ouch!!!", 1.5, world.getWidth()/2, world.getHeight()/2);
+        world.speek("Ouch", 10);
+        world.removeBody(circle);
+    }
+
+    function win() {
+        if(alive) {
+            display.add(1);
+            world.backgroundColorFlash("lightgreen");
+            world.showSplash("Yeah!!!", 1.5, world.getWidth()/2, world.getHeight()/2);
+            world.speek("Yeah", 10);
+        }
+    }
+
+    world.onBodyRemoved(circle, loose);
+
+    function newObstacle() {
+        var upperHeight = _.random(world.getHeight() * .4, world.getHeight() * .6);
+        var heightOfWindow = _.random(100, 200);
+        var lowerHeight = world.getHeight() - upperHeight - heightOfWindow;
+
+        var upperCy = upperHeight/2;
+        var lowerCy = upperHeight + heightOfWindow + lowerHeight/2;
+
+        var upper = world.rectangleBody(world.getWidth(), upperCy, 30, upperHeight, true, "red");
+        var lower = world.rectangleBody(world.getWidth(), lowerCy, 30, lowerHeight, true, "red");
+
+        world.moveBody(upper, 10, 0, upperCy).then(function () {
+            win();
+            world.removeBody(upper);
+        });
+        world.moveBody(lower, 10, 0, lowerCy).then(function () {
+            world.removeBody(lower);
+        });
+
+        world.on2BodiesCollisionStart(upper, circle, loose);
+        world.on2BodiesCollisionStart(lower, circle, loose);
+    }
+
+    newObstacle();
+    setInterval(newObstacle, 5000);
+
+</script>
+
+</body>
+</html>
