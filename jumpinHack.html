@@ -61,7 +61,7 @@
             nextCircle();
         });
 
-        world.onClick(function () {
+        world.onTouch(function () {
             world.applyXForceToBody(circle, .001);
             world.applyYForceToBody(circle, -.005);
         });
