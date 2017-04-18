@@ -45,8 +45,8 @@
 
     var circle = world.circleBody(world.getWidth()/2, world.getHeight()/2, 5, false, "blue");
     circle.img = "img/bird1Right.png";
-    circle.imgHeight = 50;
-    circle.imgWidth = 50;
+    circle.imgHeight = 75;
+    circle.imgWidth = 75;
     world.onTouch(function () {
         world.applyYForceToBody(circle, -.001);
     });
@@ -78,8 +78,8 @@
         var upperCy = upperHeight/2;
         var lowerCy = upperHeight + heightOfWindow + lowerHeight/2;
 
-        var upper = world.rectangleBody(world.getWidth(), upperCy, 30, upperHeight, true, "red");
-        var lower = world.rectangleBody(world.getWidth(), lowerCy, 30, lowerHeight, true, "red");
+        var upper = world.rectangleBody(world.getWidth(), upperCy, 30, upperHeight, true, "orange", "black", "3px");
+        var lower = world.rectangleBody(world.getWidth(), lowerCy, 30, lowerHeight, true, "orange", "black", "3px");
 
         world.moveBody(upper, 10, 0, upperCy).then(function () {
             win();

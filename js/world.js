@@ -45,17 +45,26 @@ var World = function(svgId) {
      * @param {number} r - radius
      * @param {boolean} isStatic - true = static (default: false)
      * @param {string} color - fill color (default: 'black')
+     * @param {string} strokeColor - color of the stroke (default 'black')
+     * @param {string} strokeWidth - width of the stroke (default '0px')
      * @returns the created body
      */
-    this.circleBody = function(cx, cy, r, isStatic, color) {
+    this.circleBody = function(cx, cy, r, isStatic, color, strokeColor, strokeWidth) {
         if(isStatic == null) {
             isStatic = false;
         }
         if(color == null) {
             color = "black";
         }
+        if(strokeColor == null) {
+            strokeColor = "black";
+        }
+        if(strokeWidth == null) {
+            strokeColor = "0px";
+        }
+
         var circle = Matter.Bodies.circle(cx, cy, r, {
-            isStatic: isStatic, color: color
+            isStatic: isStatic, color: color, strokeColor: strokeColor, strokeWidth: strokeWidth
         });
         addRemovePromise(circle);
         Matter.World.add(engine.world, [circle]);
@@ -80,18 +89,26 @@ var World = function(svgId) {
      * @param {number} height - height of the rectangle
      * @param {boolean} isStatic - true = static (default: false)
      * @param {string} color - fill color (default: 'black')
+     * @param {string} strokeColor - color of the stroke (default 'black')
+     * @param {string} strokeWidth - width of the stroke (default '0px')
      * @returns the created body
      */
-    this.rectangleBody = function(cx, cy, width, height, isStatic, color) {
+    this.rectangleBody = function(cx, cy, width, height, isStatic, color, strokeColor, strokeWidth) {
         if(isStatic == null) {
             isStatic = false;
         }
         if(color == null) {
             color = "black";
         }
+        if(strokeColor == null) {
+            strokeColor = "black";
+        }
+        if(strokeWidth == null) {
+            strokeColor = "0px";
+        }
 
         var rectangle = Matter.Bodies.rectangle(cx, cy, width, height, {
-            isStatic: isStatic, color: color
+            isStatic: isStatic, color: color, strokeColor: strokeColor, strokeWidth: strokeWidth
         });
         addRemovePromise(rectangle);
         Matter.World.add(engine.world, [rectangle]);

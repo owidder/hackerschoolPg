@@ -114,8 +114,14 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
         data.enter()
             .append("path")
             .attr("class", createClassNameFromBodyForDynamic)
-            .attr("style", function (d) {
-                return "fill: " + (d.color != null ? d.color : "black")
+            .style("fill", function (d) {
+                return d.color != null ? d.color : "black";
+            })
+            .style("stroke", function(d) {
+                return d.strokeColor != null ? d.strokeColor : "black";
+            })
+            .style("stroke-width", function(d) {
+                return d.strokeWidth != null ? d.strokeWidth : "0px";
             });
 
 
