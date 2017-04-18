@@ -428,6 +428,23 @@ var World = function(svgId) {
         return new Display(text, x, y, fontSize, className);
     };
 
+    function initSpeek() {
+        var readyProm = new SimplePromise();
+
+        function waitForVoices() {
+            var voices = window.speechSynthesis.getVoices();
+            if(_.isEmpty(voices)) {
+                setTimeout(waitForVoices, 100);
+            }
+            else {
+                readyProm.resolve();
+            }
+        }
+
+        waitForVoices();
+        return readyProm.promise;
+    }
+
     /**
      * speak something with one of the browser voices
      * @param {string} text - text to speak
@@ -582,6 +599,10 @@ var World = function(svgId) {
     this.getHeight = function () {
         return height;
     };
+
+    initSpeek().then(function () {
+        thisWorld.showSplash("world initialized");
+    });
 
     startGc();
 };
