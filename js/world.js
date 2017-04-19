@@ -167,6 +167,11 @@ var World = function(svgId) {
         body.force.x += force;
     };
 
+    /**
+     * apply a force to a body in y direction
+     * @param {Body} body - body to apply force on
+     * @param {number} force - force to apply (force < 0 -> to the top, forcce > 0 -> to the bottom)
+     */
     this.applyYForceToBody = function(body, force) {
         body.force.y += force;
     };
@@ -540,14 +545,36 @@ var World = function(svgId) {
     this.onTouchStart = function(func) {
         this.initTouch();
         document.body.addEventListener('touchstart', function(event) {
-            func(event.touches[0].clientX, event.touches[0].clientY, event);
+            func(x, y, event);
         });
     };
 
+    var startTimerListnenerAdded = false;
+    function addStartTimeListener() {
+        if(!startTimerListnenerAdded) {
+            startTimerListnenerAdded = true;
+            document.body.addEventListener('touchstart', function(event) {
+                var x = event.touches[0].clientX;
+                var y = event.touches[0].clientY;
+                this.startVec = [x, y];
+                this.startTime = (new Date()).getTime();
+            });
+        }
+    }
+
+    /**
+     * call a function when the touch ended (anywhere)
+     * @param {Function} func - function to call with the following parameters: x, y, duration of touch in ms, vector of touch move direction ([x, y])
+     */
     this.onTouchEnd = function(func) {
         this.initTouch();
+        addStartTimeListener();
         document.body.addEventListener('touchend', function (event) {
-            func(event.changedTouches[0].clientX, event.changedTouches[0].clientY, event);
+            var x = event.changedTouches[0].clientX;
+            var y = event.changedTouches[0].clientY;
+            var touchVec = [x - this.startVec[0], y - this.startVec[1]];
+            var touchDuration = (new Date()).getTime() - this.startTime;
+            func(x, y, touchDuration, touchVec, event);
         })
     };
 
