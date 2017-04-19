@@ -40,25 +40,19 @@
     var world = new World();
 
     world.onTouchEnd(function (x, y, duration, vec) {
-        var cirle = world.circleBody(x, y, 10, false, "grey", "black", "3px");
-        var forceX = vec[0] / (duration * 20);
-        var forceY = vec[1] / (duration * 20);
+        var cirle = world.circleBody(x, y, 30, false, "grey", "black", "3px");
+        var forceX = vec[0] / (duration * 5);
+        var forceY = vec[1] / (duration * 5);
         world.applyXForceToBody(cirle, forceX);
         world.applyYForceToBody(cirle, forceY);
     });
 
-    world.rectangleBody(world.getWidth()/2, world.getHeight(), world.getWidth(), 50, true, "blue");
-
-    var ix, iy, x, y;
-    for(ix = 0; ix < 12; ix++) {
-        for(iy = 0; iy < 5; iy++) {
-            x = ix * 50 + world.getWidth()/2;
-            y = world.getHeight() - (iy+1) * 100;
-            if(x < world.getWidth() - 40) {
-                world.rectangleBody(x, y, 40, 100, false, "red", "black", "3px");
-            }
-        }
+    function throwBlock() {
+        var rect = world.rectangleBody(world.getWidth() - 100, -300, 15, 250, false, "red", "black", "1px");
+        world.rotateBodyByDegree(rect, _.random(0, 360));
     }
+
+    setInterval(throwBlock, 100);
 
 </script>
 
