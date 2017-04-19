@@ -54,7 +54,9 @@
         for(iy = 0; iy < 10; iy++) {
             x = ix * 50 + world.getWidth()/2;
             y = world.getHeight() - (iy+1) * 50;
-            world.rectangleBody(x, y, 40, 50, false, "red", "black", "3px");
+            if(x < world.getWidth() - 40) {
+                world.rectangleBody(x, y, 40, 50, false, "red", "black", "3px");
+            }
         }
     }
 
