@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" type="text/css" href="./css/materialize.css" media="screen,projection"/>
+    <link rel="stylesheet" type="text/css" href="./css/material-icons.css"/>
+
+    <script src="./lib/touch-emulator.js"></script>
+    <script src="./lib/matter.js"></script>
+    <script src="./lib/d3.v4.js"></script>
+    <script src="./lib/jquery-3.1.1.js"></script>
+    <script src="./lib/hammer-2.0.8.js"></script>
+    <script src="./lib/lodash.js"></script>
+
+    <script src="./js/private/SimplePromise.js"></script>
+    <script src="./js/private/matterD3Renderer.js"></script>
+
+    <script src="./js/world.js"></script>
+
+    <meta charset="UTF-8">
+    <title>Flappy Hacker</title>
+
+    <style>
+        text {
+            font-size: 5em;
+            color: black;
+        }
+    </style>
+
+</head>
+<body>
+
+<svg id="field"></svg>
+
+<script>
+
+    /* global _ */
+    /* global World */
+
+    var world = new World();
+
+    world.onTouchEnd(function (x, y, duration, vec) {
+        var cirle = world.circleBody(x, y, 10, false, "grey", "black", "3px");
+        var forceX = vec[0] / (duration * 20);
+        var forceY = vec[1] / (duration * 20);
+        world.applyXForceToBody(cirle, forceX);
+        world.applyYForceToBody(cirle, forceY);
+    });
+
+    world.rectangleBody(world.getWidth()/2, world.getHeight(), world.getWidth(), 50, true, "blue");
+
+    var ix, iy, x, y;
+    for(ix = 0; ix < 12; ix++) {
+        for(iy = 0; iy < 10; iy++) {
+            x = ix * 50 + world.getWidth()/2;
+            y = world.getHeight() - (iy+1) * 50;
+            world.rectangleBody(x, y, 40, 50, false, "red", "black", "3px");
+        }
+    }
+
+</script>
+
+</body>
+</html>
