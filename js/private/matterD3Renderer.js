@@ -71,6 +71,9 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
             if(d.imgWidth != null) {
                 return d.imgWidth;
             }
+            else if(isCircle(d)) {
+                return d.circleRadius * 2;
+            }
             return d.bounds.max.x - d.bounds.min.x;
         }
 
@@ -78,7 +81,30 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
             if(d.imgHeight != null) {
                 return d.imgHeight;
             }
+            else if(isCircle(d)) {
+                return d.circleRadius * 2;
+            }
             return d.bounds.max.y - d.bounds.min.y;
+        }
+
+        function x(d) {
+            if(isCircle(d)) {
+                if(d.imgWidth != null) {
+                    return d.position.x - d.imgWidth/2;
+                }
+                return d.position.x - d.circleRadius;
+            }
+            return d.bounds.min.x;
+        }
+
+        function y(d) {
+            if(isCircle(d)) {
+                if(d.imgHeight != null) {
+                    return d.position.y - d.imgHeight/2;
+                }
+                return d.position.y - d.circleRadius;
+            }
+            return d.bounds.min.y;
         }
 
         data.enter()
@@ -91,11 +117,13 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
             });
 
         gDynamic.selectAll("image.dynamic")
-            .attr("x", function (d) {
-                return (d.bounds.max.x + d.bounds.min.x) / 2 - width(d)/2;
-            })
-            .attr("y", function (d) {
-                return (d.bounds.max.y + d.bounds.min.y) / 2 - height(d)/2;
+            .attr("x", x)
+            .attr("y", y)
+            .attr("transform", function (d) {
+                if(d.imgRotation) {
+                    return "rotate(" + (d.angle / (Math.PI*2) * 360) + " " + (x(d) + width(d)/2) + " " + (y(d) + height(d)/2) +")";
+                }
+                return "";
             });
 
         data.exit().remove();

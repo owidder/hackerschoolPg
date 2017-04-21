@@ -18,12 +18,18 @@
     <script src="./js/world.js"></script>
 
     <meta charset="UTF-8">
-    <title>Flappy Hacker</title>
+    <title>Bowling</title>
 
     <style>
         text {
             font-size: 5em;
             color: black;
+        }
+
+        rect.test{
+            stroke: black;
+            stroke-width: 1px;
+            fill: none;
         }
     </style>
 
@@ -40,11 +46,13 @@
     var world = new World();
 
     world.onTouchEnd(function (x, y, duration, vec) {
-        var cirle = world.circleBody(x, y, 10, false, "grey", "black", "3px");
-        var forceX = vec[0] / (duration * 20);
-        var forceY = vec[1] / (duration * 20);
-        world.applyXForceToBody(cirle, forceX);
-        world.applyYForceToBody(cirle, forceY);
+        var circle = world.circleBody(x, y, 20, false, "grey", "black", "3px");
+        circle.img = "img/fussball.png";
+        circle.imgRotation = true;
+        var forceX = vec[0] / (duration * 3);
+        var forceY = vec[1] / (duration * 3);
+        world.applyXForceToBody(circle, forceX);
+        world.applyYForceToBody(circle, forceY);
     });
 
     world.rectangleBody(world.getWidth()/2, world.getHeight(), world.getWidth(), 50, true, "blue");
