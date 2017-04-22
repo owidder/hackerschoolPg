@@ -66,6 +66,10 @@ var World = function(svgId) {
         d3Renderer.renderD3();
     });
 
+    this.getEngine = function () {
+        return engine;
+    };
+
     /**
      * Create a circle shaped body
      * @param {number} cx - x coordinate of the center
@@ -73,17 +77,26 @@ var World = function(svgId) {
      * @param {number} r - radius
      * @param {boolean} isStatic - true = static (default: false)
      * @param {string} color - fill color (default: 'black')
+     * @param {string} strokeColor - color of the stroke (default 'black')
+     * @param {string} strokeWidth - width of the stroke (default '0px')
      * @returns the created body
      */
-    this.circleBody = function(cx, cy, r, isStatic, color) {
+    this.circleBody = function(cx, cy, r, isStatic, color, strokeColor, strokeWidth) {
         if(isStatic == null) {
             isStatic = false;
         }
         if(color == null) {
             color = "black";
         }
+        if(strokeColor == null) {
+            strokeColor = "black";
+        }
+        if(strokeWidth == null) {
+            strokeColor = "0px";
+        }
+
         var circle = Matter.Bodies.circle(cx, cy, r, {
-            isStatic: isStatic, color: color
+            isStatic: isStatic, color: color, strokeColor: strokeColor, strokeWidth: strokeWidth
         });
         addRemovePromise(circle);
         Matter.World.add(engine.world, [circle]);
@@ -108,23 +121,44 @@ var World = function(svgId) {
      * @param {number} height - height of the rectangle
      * @param {boolean} isStatic - true = static (default: false)
      * @param {string} color - fill color (default: 'black')
+     * @param {string} strokeColor - color of the stroke (default 'black')
+     * @param {string} strokeWidth - width of the stroke (default '0px')
      * @returns the created body
      */
-    this.rectangleBody = function(cx, cy, width, height, isStatic, color) {
+    this.rectangleBody = function(cx, cy, width, height, isStatic, color, strokeColor, strokeWidth) {
         if(isStatic == null) {
             isStatic = false;
         }
         if(color == null) {
             color = "black";
         }
+        if(strokeColor == null) {
+            strokeColor = "black";
+        }
+        if(strokeWidth == null) {
+            strokeColor = "0px";
+        }
 
         var rectangle = Matter.Bodies.rectangle(cx, cy, width, height, {
-            isStatic: isStatic, color: color
+            isStatic: isStatic, color: color, strokeColor: strokeColor, strokeWidth: strokeWidth
         });
         addRemovePromise(rectangle);
         Matter.World.add(engine.world, [rectangle]);
 
         return rectangle;
+    };
+
+    /**
+     * pin a body with 2 stick
+     * @param {Body} body - body to pin
+     * @param {Point} pointB1 - end point of stick 1
+     * @param {Point} pointB2 - end point of stick 2
+     * @param {Point } pointA - point on the body (relative to center, default: {x: 0, y:0})
+     */
+    this.pinBody = function(body, pointB1, pointB2, pointA) {
+        var constraint1 = Matter.Constraint.create({bodyA: body, pointA: pointA, pointB: pointB1});
+        var constraint2 = Matter.Constraint.create({bodyA: body, pointA: pointA, pointB: pointB2});
+        Matter.World.add(engine.world, [constraint1, constraint2]);
     };
 
     /**
@@ -178,6 +212,11 @@ var World = function(svgId) {
         body.force.x += force;
     };
 
+    /**
+     * apply a force to a body in y direction
+     * @param {Body} body - body to apply force on
+     * @param {number} force - force to apply (force &lt; 0 -> to the top, forcce > 0 -> to the bottom)
+     */
     this.applyYForceToBody = function(body, force) {
         body.force.y += force;
     };
@@ -439,6 +478,23 @@ var World = function(svgId) {
         return new Display(text, x, y, fontSize, className);
     };
 
+    function initSpeek() {
+        var readyProm = new SimplePromise();
+
+        function waitForVoices() {
+            var voices = window.speechSynthesis.getVoices();
+            if(_.isEmpty(voices)) {
+                setTimeout(waitForVoices, 100);
+            }
+            else {
+                readyProm.resolve();
+            }
+        }
+
+        waitForVoices();
+        return readyProm.promise;
+    }
+
     /**
      * speak something with one of the browser voices
      * @param {string} text - text to speak
@@ -534,14 +590,36 @@ var World = function(svgId) {
     this.onTouchStart = function(func) {
         this.initTouch();
         document.body.addEventListener('touchstart', function(event) {
-            func(event.touches[0].clientX, event.touches[0].clientY, event);
+            func(x, y, event);
         });
     };
 
+    var startTimerListnenerAdded = false;
+    function addStartTimeListener() {
+        if(!startTimerListnenerAdded) {
+            startTimerListnenerAdded = true;
+            document.body.addEventListener('touchstart', function(event) {
+                var x = event.touches[0].clientX;
+                var y = event.touches[0].clientY;
+                this.startVec = [x, y];
+                this.startTime = (new Date()).getTime();
+            });
+        }
+    }
+
+    /**
+     * call a function when the touch ended (anywhere)
+     * @param {Function} func - function to call with the following parameters: x, y, duration of touch in ms, vector of touch move direction ([x, y])
+     */
     this.onTouchEnd = function(func) {
         this.initTouch();
+        addStartTimeListener();
         document.body.addEventListener('touchend', function (event) {
-            func(event.changedTouches[0].clientX, event.changedTouches[0].clientY, event);
+            var x = event.changedTouches[0].clientX;
+            var y = event.changedTouches[0].clientY;
+            var touchVec = [x - this.startVec[0], y - this.startVec[1]];
+            var touchDuration = (new Date()).getTime() - this.startTime;
+            func(x, y, touchDuration, touchVec, event);
         })
     };
 
@@ -594,6 +672,10 @@ var World = function(svgId) {
         return height;
     };
 
+    initSpeek().then(function () {
+        thisWorld.showSplash("world initialized");
+    });
+
     startGc();
 };
 </code></pre>
@@ -612,7 +694,7 @@ var World = function(svgId) {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon Apr 17 2017 22:39:50 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Apr 22 2017 09:43:23 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

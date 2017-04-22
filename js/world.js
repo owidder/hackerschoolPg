@@ -38,6 +38,10 @@ var World = function(svgId) {
         d3Renderer.renderD3();
     });
 
+    this.getEngine = function () {
+        return engine;
+    };
+
     /**
      * Create a circle shaped body
      * @param {number} cx - x coordinate of the center
@@ -114,6 +118,19 @@ var World = function(svgId) {
         Matter.World.add(engine.world, [rectangle]);
 
         return rectangle;
+    };
+
+    /**
+     * pin a body with 2 stick
+     * @param {Body} body - body to pin
+     * @param {Point} pointB1 - end point of stick 1
+     * @param {Point} pointB2 - end point of stick 2
+     * @param {Point } pointA - point on the body (relative to center, default: {x: 0, y:0})
+     */
+    this.pinBody = function(body, pointB1, pointB2, pointA) {
+        var constraint1 = Matter.Constraint.create({bodyA: body, pointA: pointA, pointB: pointB1});
+        var constraint2 = Matter.Constraint.create({bodyA: body, pointA: pointA, pointB: pointB2});
+        Matter.World.add(engine.world, [constraint1, constraint2]);
     };
 
     /**
