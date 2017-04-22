@@ -42,6 +42,14 @@ var World = function(svgId) {
         return engine;
     };
 
+    this.onKey = function(func, key) {
+      document.addEventListener('keydown', function(event){
+        if (key === undefined || event.keyCode === key) {
+           func(event.keyCode);
+        }
+      })
+    }
+
     this.onRight = function (func, quot) {
         if(_.isEmpty(quot) && isNaN(quot)) {
             quot = 3;
@@ -229,7 +237,7 @@ var World = function(svgId) {
     this.rotateBodyByDegree = function (body, angle) {
         Matter.Body.rotate(body, angle / 180 * Math.PI);
     };
-    
+
     /**
      * Rotate a body by an angle in radiant (0 - 2 * Math.PI)
      *

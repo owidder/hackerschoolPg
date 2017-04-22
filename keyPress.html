@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" type="text/css" href="./css/materialize.css" media="screen,projection"/>
+    <link rel="stylesheet" type="text/css" href="./css/material-icons.css"/>
+
+    <script src="./lib/touch-emulator.js"></script>
+    <script src="./lib/matter.js"></script>
+    <script src="./lib/d3.v4.js"></script>
+    <script src="./lib/jquery-3.1.1.js"></script>
+    <script src="./lib/hammer-2.0.8.js"></script>
+    <script src="./lib/lodash.js"></script>
+
+    <script src="./js/private/SimplePromise.js"></script>
+    <script src="./js/private/matterD3Renderer.js"></script>
+
+    <script src="./js/world.js"></script>
+
+    <meta charset="UTF-8">
+    <title>Just a cool game</title>
+
+    <style>
+        text {
+            font-size: 5em;
+            color: black;
+        }
+    </style>
+
+</head>
+<body>
+
+<svg id="field"></svg>
+
+<script>
+
+    /* global _ */
+    /* global World */
+
+    var LEFT = 37;
+    var UP = 38;
+    var RIGHT = 39;
+    var DOWN = 40;
+
+    var SPACE = 32;
+
+
+    var world = new World();
+
+    var circle = world.circleBody(world.getWidth() / 2, world.getHeight() / 2, 50, false, "blue");
+    world.hangBody(circle, {x: world.getWidth() / 2, y: 0});
+    var rect = world.rectangleBody(world.getWidth() / 2, world.getHeight() - 10, world.getWidth(), 20, true, "red")
+
+
+    world.onKey(function(keyCode) {
+      world.showSplash("KeyCode: " + keyCode)
+    })
+
+    world.onKey(function(){
+      world.applyXForceToBody(circle, -0.1)
+    }, LEFT)
+
+    world.onKey(function(){
+      world.applyXForceToBody(circle, 0.1)
+    }, RIGHT)
+
+    world.onKey(function(){
+      console.log("up")
+         world.scaleBody(rect, 1,1.1);
+    }, UP)
+
+    world.onKey(function(){
+      console.log("down")
+         world.scaleBody(rect, 1, 0.9);
+    }, DOWN)
+
+</script>
+
+</body>
+</html>
