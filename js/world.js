@@ -42,6 +42,82 @@ var World = function(svgId) {
         return engine;
     };
 
+    this.onRight = function (func, quot) {
+        if(_.isEmpty(quot) && isNaN(quot)) {
+            quot = 3;
+        }
+        function touchMoveRight(x, y, touchDuration, touchVec, event) {
+            func(x, y, touchDuration, Math.abs(touchVec[0]), event);
+        }
+        this.onTouchEnd(function (x, y, touchDuration, touchVec, event) {
+            if(touchVec[0] > 0 && touchVec[1] == 0) {
+                touchMoveRight(x, y, touchDuration, touchVec, event);
+            }
+            else if(touchVec[0] > 0) {
+                if(Math.abs(touchVec[0] / touchVec[1]) > quot) {
+                    touchMoveRight(x, y, touchDuration, touchVec, event);
+                }
+            }
+        })
+    };
+
+    this.onLeft = function (func, quot) {
+        if(_.isEmpty(quot) && isNaN(quot)) {
+            quot = 3;
+        }
+        function touchMoveLeft(x, y, touchDuration, touchVec, event) {
+            func(x, y, touchDuration, Math.abs(touchVec[0]), event);
+        }
+        this.onTouchEnd(function (x, y, touchDuration, touchVec, event) {
+            if(touchVec[0] < 0 && touchVec[1] == 0) {
+                touchMoveLeft(x, y, touchDuration, touchVec, event);
+            }
+            else if(touchVec[0] < 0) {
+                if(Math.abs(touchVec[0] / touchVec[1]) > quot) {
+                    touchMoveLeft(x, y, touchDuration, touchVec, event);
+                }
+            }
+        })
+    };
+
+    this.onUp = function (func, quot) {
+        if(_.isEmpty(quot) && isNaN(quot)) {
+            quot = 3;
+        }
+        function touchMoveUp(x, y, touchDuration, touchVec, event) {
+            func(x, y, touchDuration, Math.abs(touchVec[1]), event);
+        }
+        this.onTouchEnd(function (x, y, touchDuration, touchVec, event) {
+            if(touchVec[1] < 0 && touchVec[0] == 0) {
+                touchMoveUp(x, y, touchDuration, touchVec, event);
+            }
+            else if(touchVec[1] < 0) {
+                if(Math.abs(touchVec[1] / touchVec[0]) > quot) {
+                    touchMoveUp(x, y, touchDuration, touchVec, event);
+                }
+            }
+        })
+    };
+
+    this.onDown = function (func, quot) {
+        if(_.isEmpty(quot) && isNaN(quot)) {
+            quot = 3;
+        }
+        function touchMoveDown(x, y, touchDuration, touchVec, event) {
+            func(x, y, touchDuration, Math.abs(touchVec[1]), event);
+        }
+        this.onTouchEnd(function (x, y, touchDuration, touchVec, event) {
+            if(touchVec[1] > 0 && touchVec[0] == 0) {
+                touchMoveDown(x, y, touchDuration, touchVec, event);
+            }
+            else if(touchVec[1] > 0) {
+                if(Math.abs(touchVec[1] / touchVec[0]) > quot) {
+                    touchMoveDown(x, y, touchDuration, touchVec, event);
+                }
+            }
+        })
+    };
+
     /**
      * Create a circle shaped body
      * @param {number} cx - x coordinate of the center
