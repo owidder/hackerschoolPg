@@ -134,6 +134,17 @@ var World = function(svgId) {
     };
 
     /**
+     * hang a body on the wall with a stick
+     * @param {Body} body - body to pin
+     * @param {Point} pointB - end point of stick
+     * @param {Point } pointA - point on the body (relative to center, default: {x: 0, y:0})
+     */
+    this.hangBody = function(body, pointB, pointA) {
+        var constraint = Matter.Constraint.create({bodyA: body, pointA: pointA, pointB: pointB});
+        Matter.World.add(engine.world, [constraint]);
+    };
+
+    /**
      * Rotate a body by an angle in degree (0 - 360)
      *
      * @param {Body} body - body to rotate

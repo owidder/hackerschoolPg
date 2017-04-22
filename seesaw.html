@@ -42,7 +42,7 @@
     var cx = world.getWidth()/2;
     var cy = world.getHeight()/2;
     var rect = world.rectangleBody(cx, cy, world.getWidth()*0.75, 30, false, "blue");
-    world.pinBody(rect, {x: cx-30, y: cy+50}, {x: cx+30, y: cy+50});
+    world.hangBody(rect, {x: cx, y: cy});
 
     world.onTouch(function (x, y) {
         var circle = world.circleBody(x, y, _.random(5, 30), false, "red", "black", "2px");
