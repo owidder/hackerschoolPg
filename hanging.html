@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" type="text/css" href="./css/materialize.css" media="screen,projection"/>
+    <link rel="stylesheet" type="text/css" href="./css/material-icons.css"/>
+
+    <script src="./lib/touch-emulator.js"></script>
+    <script src="./lib/matter.js"></script>
+    <script src="./lib/d3.v4.js"></script>
+    <script src="./lib/jquery-3.1.1.js"></script>
+    <script src="./lib/hammer-2.0.8.js"></script>
+    <script src="./lib/lodash.js"></script>
+
+    <script src="./js/private/SimplePromise.js"></script>
+    <script src="./js/private/matterD3Renderer.js"></script>
+
+    <script src="./js/world.js"></script>
+
+    <meta charset="UTF-8">
+    <title>Just a cool game</title>
+
+    <style>
+        text {
+            font-size: 5em;
+            color: black;
+        }
+    </style>
+
+</head>
+<body>
+
+<svg id="field"></svg>
+
+<script>
+
+    /* global _ */
+    /* global World */
+
+    var world = new World();
+
+    var circle1 = world.circleBody(100, 500, 20, false, "blue", "black", "2px");
+    world.hangBody(circle1, {x: 100, y: 100});
+    
+    var circle2 = world.circleBody(140, 500, 20, false, "blue", "black", "2px");
+    world.hangBody(circle2, {x: 140, y: 100});
+
+    var circle3 = world.circleBody(180, 500, 20, false, "blue", "black", "2px");
+    world.hangBody(circle3, {x: 180, y: 100});
+
+    var circle4 = world.circleBody(620, 100, 20, false, "red", "black", "2px");
+    world.hangBody(circle4, {x: 220, y: 100});
+
+
+</script>
+
+</body>
+</html>
