@@ -121,13 +121,13 @@ var World = function(svgId) {
     };
 
     /**
-     * pin a body with 2 stick
+     * hang a body with 2 stick
      * @param {Body} body - body to pin
      * @param {Point} pointB1 - end point of stick 1
      * @param {Point} pointB2 - end point of stick 2
      * @param {Point } pointA - point on the body (relative to center, default: {x: 0, y:0})
      */
-    this.pinBody = function(body, pointB1, pointB2, pointA) {
+    this.hang2Body = function(body, pointB1, pointB2, pointA) {
         var constraint1 = Matter.Constraint.create({bodyA: body, pointA: pointA, pointB: pointB1});
         var constraint2 = Matter.Constraint.create({bodyA: body, pointA: pointA, pointB: pointB2});
         Matter.World.add(engine.world, [constraint1, constraint2]);
