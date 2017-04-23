@@ -52,7 +52,7 @@
                     {{@index}} / {{name}} / {{languageName}}
                 </div>
                 <div class="col l3 m6 s12 smalltext">
-                    <a onclick="speekText('{{languageNativeName}}', {{@index}})" class="btn">{{languageNativeName}}</a>
+                    <a onclick="speakText('{{languageNativeName}}', {{@index}})" class="btn">{{languageNativeName}}</a>
                 </div>
                 <div class="col l6 m12 s12">
                     <table>
@@ -61,7 +61,7 @@
                                 <input placeholder="Some text to speak" id="i-{{@index}}" type="text" class="validate">
                             </td>
                             <td>
-                                <a onclick="speekInput({{@index}})" class="btn"><i class="material-icons">volume_up</i></a>
+                                <a onclick="speakInput({{@index}})" class="btn"><i class="material-icons">volume_up</i></a>
                             </td>
                         </tr>
                     </table>
@@ -79,16 +79,16 @@
         /* global Handlebars */
         /* global window */
 
-        var speekText = function (text, voiceNum) {
+        var speakText = function (text, voiceNum) {
             var msg = new SpeechSynthesisUtterance(text);
             var voices = window.speechSynthesis.getVoices();
             msg.voice = voices[voiceNum];
             window.speechSynthesis.speak(msg);
         };
 
-        var speekInput = function(voiceNum) {
+        var speakInput = function(voiceNum) {
             var text = $("#i-" + voiceNum).val();
-            speekText(text, voiceNum);
+            speakText(text, voiceNum);
         };
 
         $(function () {

@@ -48,13 +48,14 @@ var World = function(svgId) {
         return engine;
     };
 
-    this.onKey = function(func, key) {
-      document.addEventListener('keydown', function(event){
-        if (key === undefined || event.keyCode === key) {
-           func(event.keyCode);
-        }
-      })
-    }
+    this.onKey = function (func, key) {
+        document.addEventListener('keydown', function (event) {
+            if (key === undefined || event.keyCode === key) {
+                event.preventDefault();
+                func(event.keyCode);
+            }
+        })
+    };
 
     this.onRight = function (func, quot) {
         if(_.isEmpty(quot) && isNaN(quot)) {
@@ -296,6 +297,22 @@ var World = function(svgId) {
      */
     this.applyYForceToBody = function(body, force) {
         body.force.y += force;
+    };
+
+    this.setXGravity = function (grav) {
+        engine.world.gravity.x = grav;
+    };
+
+    this.setYGravity = function (grav) {
+        engine.world.gravity.y = grav;
+    };
+
+    this.addXGravity = function (grav) {
+        engine.world.gravity.x += grav;
+    };
+
+    this.addYGravity = function (grav) {
+        engine.world.gravity.y += grav;
     };
 
     /**
@@ -555,7 +572,7 @@ var World = function(svgId) {
         return new Display(text, x, y, fontSize, className);
     };
 
-    function initSpeek() {
+    function initSpeak() {
         var readyProm = new SimplePromise();
 
         function waitForVoices() {
@@ -578,7 +595,7 @@ var World = function(svgId) {
      * @param {number} voiceNum - number of the voice to use
      * {@link https://cdn.rawgit.com/iterawidder/hackerschoolPg/v3/voices.html}
      */
-    this.speek = function (text, voiceNum) {
+    this.speak = function (text, voiceNum) {
         var msg = this.currentMessage;
         if(msg == null) {
             msg = new SpeechSynthesisUtterance(text);
@@ -749,7 +766,7 @@ var World = function(svgId) {
         return height;
     };
 
-    initSpeek().then(function () {
+    initSpeak().then(function () {
         thisWorld.showSplash("world initialized");
     });
 

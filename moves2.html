@@ -53,19 +53,19 @@
     world.rectangleBody(world.getWidth(), world.getHeight()/2, 50, world.getHeight(), true, "grey");
 
     world.onRight(function (x, y, duration, touchLength) {
-        world.applyXForceToBody(circle, 0.01);
+        world.addXGravity(.1);
     });
     
     world.onLeft(function (x, y, duration, touchLength) {
-        world.applyXForceToBody(circle, -0.01);
+        world.addXGravity(-.1);
     });
 
     world.onUp(function (x, y, duration, touchLength) {
-        world.applyYForceToBody(circle, -0.01);
+        world.addYGravity(-.1);
     });
 
     world.onDown(function (x, y, duration, touchLength) {
-        world.applyYForceToBody(circle, 0.01);
+        world.addYGravity(.1);
     });
 
 </script>
