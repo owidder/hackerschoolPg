@@ -41,30 +41,30 @@
 
     var circle = world.circleBody(world.getWidth() / 2, world.getHeight() / 2, 50, false, "blue");
     world.hangBody(circle, {x: world.getWidth() / 2, y: 0});
-    var rect = world.rectangleBody(world.getWidth() / 2, world.getHeight() - 10, world.getWidth(), 20, true, "red")
+    var rect = world.rectangleBody(world.getWidth() / 2, world.getHeight() - 10, world.getWidth(), 20, true, "red");
+
+    var display = world.createDisplay("-", 100, 100, 2);
 
 
-    world.onKey(function(keyCode) {
-      world.showSplash("KeyCode: " + keyCode)
+    world.onKey(function (keyCode) {
+        display.changeText("KeyCode: " + keyCode);
     });
 
-    world.onKey(function(){
-      world.applyXForceToBody(circle, -0.1)
-    }, world.KEY_LEFT);
+    world.onLeft(function () {
+        world.applyXForceToBody(circle, -0.1)
+    });
 
-    world.onKey(function(){
-      world.applyXForceToBody(circle, 0.1)
-    }, world.KEY_RIGHT);
+    world.onRight(function () {
+        world.applyXForceToBody(circle, 0.1)
+    });
 
-    world.onKey(function(){
-      console.log("up")
-         world.scaleBody(rect, 1,1.1);
-    }, world.KEY_UP)
+    world.onUp(function () {
+        world.scaleBody(rect, 1, 1.1);
+    });
 
-    world.onKey(function(){
-      console.log("down")
-         world.scaleBody(rect, 1, 0.9);
-    }, world.KEY_DOWN)
+    world.onDown(function () {
+        world.scaleBody(rect, 1, 0.9);
+    });
 
 </script>
 
