@@ -29,6 +29,12 @@ var World = function(svgId) {
     var gDynamic = svg.append("g");
     var gText = svg.append("g");
 
+    this.KEY_LEFT = 37;
+    this.KEY_UP = 38;
+    this.KEY_RIGHT = 39;
+    this.KEY_DOWN = 40;
+    this.KEY_SPACE = 32;
+
     var engine = Matter.Engine.create();
 
     Matter.Engine.run(engine);
@@ -54,6 +60,7 @@ var World = function(svgId) {
         if(_.isEmpty(quot) && isNaN(quot)) {
             quot = 3;
         }
+        this.onKey(func, this.KEY_RIGHT);
         function touchMoveRight(x, y, touchDuration, touchVec, event) {
             func(x, y, touchDuration, Math.abs(touchVec[0]), event);
         }
@@ -73,6 +80,7 @@ var World = function(svgId) {
         if(_.isEmpty(quot) && isNaN(quot)) {
             quot = 3;
         }
+        this.onKey(func, this.KEY_LEFT);
         function touchMoveLeft(x, y, touchDuration, touchVec, event) {
             func(x, y, touchDuration, Math.abs(touchVec[0]), event);
         }
@@ -92,6 +100,7 @@ var World = function(svgId) {
         if(_.isEmpty(quot) && isNaN(quot)) {
             quot = 3;
         }
+        this.onKey(func, this.KEY_UP);
         function touchMoveUp(x, y, touchDuration, touchVec, event) {
             func(x, y, touchDuration, Math.abs(touchVec[1]), event);
         }
@@ -111,6 +120,7 @@ var World = function(svgId) {
         if(_.isEmpty(quot) && isNaN(quot)) {
             quot = 3;
         }
+        this.onKey(func, this.KEY_DOWN);
         function touchMoveDown(x, y, touchDuration, touchVec, event) {
             func(x, y, touchDuration, Math.abs(touchVec[1]), event);
         }

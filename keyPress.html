@@ -37,14 +37,6 @@
     /* global _ */
     /* global World */
 
-    var LEFT = 37;
-    var UP = 38;
-    var RIGHT = 39;
-    var DOWN = 40;
-
-    var SPACE = 32;
-
-
     var world = new World();
 
     var circle = world.circleBody(world.getWidth() / 2, world.getHeight() / 2, 50, false, "blue");
@@ -54,25 +46,25 @@
 
     world.onKey(function(keyCode) {
       world.showSplash("KeyCode: " + keyCode)
-    })
+    });
 
     world.onKey(function(){
       world.applyXForceToBody(circle, -0.1)
-    }, LEFT)
+    }, world.KEY_LEFT);
 
     world.onKey(function(){
       world.applyXForceToBody(circle, 0.1)
-    }, RIGHT)
+    }, world.KEY_RIGHT);
 
     world.onKey(function(){
       console.log("up")
          world.scaleBody(rect, 1,1.1);
-    }, UP)
+    }, world.KEY_UP)
 
     world.onKey(function(){
       console.log("down")
          world.scaleBody(rect, 1, 0.9);
-    }, DOWN)
+    }, world.KEY_DOWN)
 
 </script>
 
