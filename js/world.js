@@ -25,8 +25,8 @@ var World = function(svgId) {
         .attr("width", width)
         .attr("height", height);
     var gNobodies = svg.append("g");
-    var gStatic = svg.append("g");
-    var gDynamic = svg.append("g");
+    var gConstraints = svg.append("g");
+    var gBodies = svg.append("g");
     var gText = svg.append("g");
 
     this.KEY_LEFT = 37;
@@ -39,7 +39,7 @@ var World = function(svgId) {
 
     Matter.Engine.run(engine);
 
-    var d3Renderer = new MatterD3Renderer(engine, gStatic, gDynamic);
+    var d3Renderer = new MatterD3Renderer(engine, gBodies, gConstraints);
     Matter.Events.on(engine, "afterUpdate", function () {
         d3Renderer.renderD3();
     });
@@ -148,7 +148,9 @@ var World = function(svgId) {
      * @param {string} strokeWidth - width of the stroke (default '0px')
      * @returns the created body
      */
-    this.circleBody = function(cx, cy, r, isStatic, color, strokeColor, strokeWidth) {
+    this.circleBody = function(cx, cy, r, isStatic, color, strokeColor, strokeWidth, extra) {
+        extra = extra || {};
+
         if(isStatic == null) {
             isStatic = false;
         }
@@ -163,7 +165,14 @@ var World = function(svgId) {
         }
 
         var circle = Matter.Bodies.circle(cx, cy, r, {
-            isStatic: isStatic, color: color, strokeColor: strokeColor, strokeWidth: strokeWidth
+            collisionFilter: {
+                group: extra.collisionFilterGroup
+            },
+            isStatic: isStatic,
+            color: color,
+            strokeColor: strokeColor,
+            strokeWidth: strokeWidth,
+            title: extra.title
         });
         addRemovePromise(circle);
         Matter.World.add(engine.world, [circle]);
@@ -213,6 +222,13 @@ var World = function(svgId) {
         Matter.World.add(engine.world, [rectangle]);
 
         return rectangle;
+    };
+
+    this.connect2Bodies = function(bodyA, bodyB, length, stiffness) {
+        var constraint = Matter.Constraint.create({bodyA: bodyA, bodyB: bodyB, length: length, stiffness: stiffness, render: {
+            lineWidth: 1
+        }});
+        Matter.World.add(engine.world, [constraint]);
     };
 
     /**
@@ -764,6 +780,23 @@ var World = function(svgId) {
 
     this.getHeight = function () {
         return height;
+    };
+
+    this.pause = function () {
+        d3Renderer.setRender(false);
+    };
+
+    this.resume = function () {
+        d3Renderer.setRender(true);
+    };
+
+    this.togglePause = function () {
+        d3Renderer.toggleRender();
+    };
+
+    this.stop = function() {
+        this.pause();
+        Matter.Engine.clear(engine);
     };
 
     initSpeak().then(function () {

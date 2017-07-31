@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" type="text/css" href="./css/materialize.css" media="screen,projection"/>
+    <link rel="stylesheet" type="text/css" href="./css/material-icons.css"/>
+
+    <script src="./lib/touch-emulator.js"></script>
+    <script src="./lib/matter.js"></script>
+    <script src="./lib/d3.v4.js"></script>
+    <script src="./lib/jquery-3.1.1.js"></script>
+    <script src="./lib/hammer-2.0.8.js"></script>
+    <script src="./lib/lodash.js"></script>
+
+    <script src="./js/private/SimplePromise.js"></script>
+    <script src="./js/private/matterD3Renderer.js"></script>
+
+    <script src="./js/world.js"></script>
+
+    <meta charset="UTF-8">
+    <title>Just a cool game</title>
+
+    <style>
+        text {
+            font-size: 5em;
+            color: black;
+        }
+    </style>
+
+</head>
+<body>
+
+<svg id="field"></svg>
+
+<script>
+
+    /* global _ */
+    /* global World */
+
+    var FORCE = 0.001;
+
+    var world = new World();
+
+    world.setYGravity(0);
+    world.setXGravity(0);
+
+    function createBall(x, y) {
+        var ball = world.circleBody(x, y, 1, false, "blue", undefined, undefined, {collisionFilterGroup: -1});
+        ball.restitution = 0.9;
+
+        return ball;
+    }
+
+    var NUMBER_OF_BALLS_PER_ROW = 100;
+    var NUMBER_OF_BALLS_PER_COL = 100;
+    var NUMBER_OF_BALLS = NUMBER_OF_BALLS_PER_ROW * NUMBER_OF_BALLS_PER_COL;
+
+    var balls = [];
+
+    function x(i) {
+        return ((i % NUMBER_OF_BALLS_PER_ROW) + 1) * (1000 / NUMBER_OF_BALLS_PER_ROW);
+    }
+
+    function y(i) {
+        return (Math.floor(i / NUMBER_OF_BALLS_PER_COL) + 1) * (800 / NUMBER_OF_BALLS_PER_COL);
+    }
+
+    var i;
+    for(i = 0; i < NUMBER_OF_BALLS; i++) {
+        balls.push(createBall(x(i), y(i)));
+    }
+
+    function createRandomConnections(i) {
+        if(Math.random() < .5) {
+            var num = Math.random() * 10;
+            var n, target;
+            for(n = 0; n < num; n++) {
+                target = Math.floor(Math.random() * NUMBER_OF_BALLS);
+                if(target != i) {
+                    world.connect2Bodies(balls[i], balls[target], Math.random() * 300, 0.0001);
+                }
+            }
+        }
+    }
+
+    for(i = 0; i  < NUMBER_OF_BALLS-1; i++) {
+        createRandomConnections(i);
+    }
+
+    world.onRight(function (x, y, duration, touchLength) {
+        world.applyXForceToBody(ball1, FORCE);
+    });
+    
+    world.onLeft(function (x, y, duration, touchLength) {
+        world.applyXForceToBody(ball1, -FORCE);
+    });
+
+    world.onUp(function (x, y, duration, touchLength) {
+        world.applyYForceToBody(ball1, -FORCE);
+    });
+
+    world.onDown(function (x, y, duration, touchLength) {
+        world.applyYForceToBody(ball1, FORCE);
+    });
+
+</script>
+
+</body>
+</html>

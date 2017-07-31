@@ -3,10 +3,12 @@
 /* global Matter */
 
 
-function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
-    var gStatic = _gStatic;
-    var gDynamic = _gDynamic;
+function MatterD3Renderer(_engine, _gBodies, _gConstraints) {
+    var gBodies = _gBodies;
+    var gConstraints = _gConstraints;
     var engine = _engine;
+
+    var render = true;
 
     function isStatic(body) {
         return body.isStatic;
@@ -40,21 +42,13 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
         return pathStr;
     }
 
-    function createClassNameFromBody(d, defaultClassName) {
+    function createClassNameFromBody(d) {
         if(d.className != null) {
             return defaultClassName + " " + d.className;
         }
         else {
-            return defaultClassName;
+            return "dynamic";
         }
-    }
-
-    function createClassNameFromBodyForStatic(d) {
-        return createClassNameFromBody(d, "static");
-    }
-
-    function createClassNameFromBodyForDynamic(d) {
-        return createClassNameFromBody(d, "dynamic");
     }
 
     function renderD3Img() {
@@ -62,7 +56,7 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
             return b.img != null;
         });
 
-        var data = gDynamic.selectAll("image.dynamic")
+        var data = gBodies.selectAll("image.dynamic")
             .data(dynamicImg, function (d) {
                 return d.id;
             });
@@ -116,7 +110,7 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
                 return d.img;
             });
 
-        gDynamic.selectAll("image.dynamic")
+        gBodies.selectAll("image.dynamic")
             .attr("x", x)
             .attr("y", y)
             .attr("transform", function (d) {
@@ -134,14 +128,14 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
             return b.img == null;
         });
 
-        var data = gDynamic.selectAll("path.dynamic")
+        var data = gBodies.selectAll("path.dynamic")
             .data(dynamic, function(d) {
                 return d.id;
             });
 
         data.enter()
             .append("path")
-            .attr("class", createClassNameFromBodyForDynamic)
+            .attr("class", createClassNameFromBody)
             .style("fill", function (d) {
                 return d.color != null ? d.color : "black";
             })
@@ -153,17 +147,52 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
             });
 
 
-        gDynamic.selectAll("path.dynamic")
+        gBodies.selectAll("path.dynamic")
             .attr("d", createPathFromBody);
 
         data.exit().remove();
+    }
+    
+    function isVisible(constraint) {
+        return constraint.render && constraint.render.visible;
+    }
+
+    function renderD3Constraints() {
+        var constraints = Matter.Composite.allConstraints(engine.world).filter(isVisible);
+        if(constraints.length > 0) {
+            var data = gConstraints.selectAll("line.constraint")
+                .data(constraints, function (d) {
+                    return d.id;
+                });
+
+            data.enter()
+                .append("line")
+                .attr("class", "constraint")
+                .style("stroke-width", function (d) {
+                    return d.render.lineWidth + "px;";
+                });
+
+            gConstraints.selectAll("line.constraint")
+                .attr("x1", function (d) {
+                    return d.bodyA.position.x;
+                })
+                .attr("y1", function (d) {
+                    return d.bodyA.position.y;
+                })
+                .attr("x2", function (d) {
+                    return d.bodyB.position.x;
+                })
+                .attr("y2", function (d) {
+                    return d.bodyB.position.y;
+                });
+        }
     }
 
     function renderD3DynamicTitles() {
         var bodiesWithTitles = Matter.Composite.allBodies(engine.world).filter(hasTitle);
 
         if(bodiesWithTitles.length > 0) {
-            var data = gDynamic.selectAll("text.dynamic")
+            var data = gBodies.selectAll("text.dynamic")
                 .data(bodiesWithTitles, function(d) {
                     return d.id;
                 });
@@ -175,7 +204,7 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
                     return d.title;
                 });
 
-            gDynamic.selectAll("text.dynamic")
+            gBodies.selectAll("text.dynamic")
                 .attr("x", function(d) {
                     var avx = (d.bounds.max.x + d.bounds.min.x) / 2 - 20;
                     return avx;
@@ -188,11 +217,23 @@ function MatterD3Renderer(_engine, _gStatic, _gDynamic) {
 
     }
 
+    function toggleRender() {
+        render = !render;
+    }
+
+    function setRender(_render) {
+        render = _render;
+    }
+
+    this.constructor.prototype.toggleRender = toggleRender;
+    this.constructor.prototype.setRender = setRender;
+
     this.constructor.prototype.renderD3 = function() {
-        if(gDynamic != null) {
+        if(gBodies != null && render) {
             renderD3Img();
             renderD3Bodies();
             renderD3DynamicTitles();
+            renderD3Constraints();
         }
     }
 }
