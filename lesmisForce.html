@@ -26,18 +26,27 @@
 
 </style>
 
-<svg width="960" height="600"></svg>
+<div id="canvas"></div>
 <script src="./lib/d3.v4.js"></script>
 <script src="res/lesmis.js"></script>
+<script src="./lib/matter.js"></script>
 <script src="./js/private/SimplePromise.js"></script>
 <script src="./js/private/matterD3Renderer.js"></script>
 <script src="./js/world.js"></script>
+<script src="./lib/lodash.js"></script>
 
 <script>
 
-    var svg = d3.select("svg"),
-        width = +svg.attr("width"),
-        height = +svg.attr("height");
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
+    var svg = d3.select("#canvas").append("svg")
+        .attr("class", "force")
+        .attr("width", width)
+        .attr("height", height)
+        .on("click", function () {
+            switchFromForceToMatter();
+        });
 
     var color = d3.scaleOrdinal(d3.schemeCategory20);
 
